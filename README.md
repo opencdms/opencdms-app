@@ -1,4 +1,4 @@
-# temp
+# Opencdms app
 
 ## Project setup
 ```
