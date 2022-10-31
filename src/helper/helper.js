@@ -5,7 +5,7 @@ function buildRoutes(){
     var pages = []
     registry.forEach((entry)=>{
         if(entry.show){
-            temp = {
+           var  temp = {
                 path: entry.path,
                 name: entry.name,
                 component: entry.component
