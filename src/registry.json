@@ -1,0 +1,16 @@
+[
+      {
+        "component": "CNavItem",
+        "name": "Content",
+        "to": "/display",
+        "icon": "cil-drop",
+        "display": true
+      },
+      {
+        "component": "CNavItem",
+        "name": "Hidden",
+        "to": "/hidden",
+        "icon": "cil-drop",
+        "display": false
+      }
+]
