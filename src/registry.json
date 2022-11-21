@@ -12,5 +12,12 @@
         "to": "/hidden",
         "icon": "cil-drop",
         "display": false
+      },
+      {
+        "component": "CNavItem",
+        "name": "Custom Element Demo",
+        "to": "/custom-element",
+        "icon": "cil-drop",
+        "display": true
       }
 ]

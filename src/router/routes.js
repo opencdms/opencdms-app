@@ -36,6 +36,15 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "hiddenpage" */ '@/views/HiddenPage.vue'),
       },
+      {
+        path: '/custom-element',
+        name: 'CustomElementDemo',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "hiddenpage" */ '@/views/CustomElementDemo.vue'),
+      },
     ],
   },
 ]
