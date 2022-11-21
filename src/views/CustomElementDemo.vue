@@ -2,7 +2,7 @@
      <opencdms-helloworld></opencdms-helloworld>
 </template>
 <script>
-import "opencdms-helloworld"
+import "@opencdms/helloworld"
 export default {
     name: "CustomElementDemo"
 }
