@@ -104,3 +104,22 @@ e.g
         ]
       }
 ]
+
+
+### Web Components
+
+We can render webcomponets built using any javascript framework in this application shell.
+
+To render a web component:
+
+1. Create the web component and publish in npm or define it in the `src/web-components` folder.
+
+2. Ensure that the tagname of the web component is prefixed with `opencdms-` eg `<opencdms-helloworld>....</opencdms-helloworld>`.
+
+3. Create a  view page in `src/views` where the component would be rendered in. An example has been done in `src/views/CustomElementDemo.vue`.
+
+4. Create a route entry in `src/routes` for the page created in step 3 above.
+
+5. Create a registry entry in src/registry.json for the page created above. Set the display to true or false as you desire.
+
+6. Launch the application.

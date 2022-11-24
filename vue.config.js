@@ -1,6 +1,19 @@
 const { defineConfig } = require('@vue/cli-service')
+
 module.exports = defineConfig({
   transpileDependencies: true,
+  chainWebpack: config => {
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => ({
+        ...options,
+        compilerOptions: {
+          // treat any tag that starts with ce- as custom elements
+          isCustomElement: tag => tag.startsWith('opencdms-')
+        }
+      }))
+  },
   pwa: {
     name: 'OpenCDMS',
     themeColor: '#3c4b64',
@@ -11,4 +24,5 @@ module.exports = defineConfig({
       background_color: '#3c4b64'
     }
   }
+  
 })
