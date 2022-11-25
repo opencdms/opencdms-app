@@ -1,0 +1,105 @@
+name: deploy-to-pilot
+on:
+  push:
+    branches:
+      - main
+env:
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    AWS_REGION: ${{ secrets.AWS_REGION }}
+    DESTINATION_BUCKET:  ${{ secrets.AWS_APP_BUCKET_NAME  }}
+
+    
+
+jobs:
+  
+  build-frontend-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+     
+      - name: Node version
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '16'
+
+      # Install npm packages
+      - name:  BUild
+        run: |  
+          rm -rf dist/*
+          touch .env
+          echo -e $APP_ENV_FILE > .env
+          npm install
+          npm run build
+        shell: bash
+        env:
+          APP_ENV_FILE : ${{ secrets.APP_ENV_FILE }}
+      
+      - name: Upload build file artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-dist
+          path: ./dist
+
+  # keep
+  # deploy-app-to-cloudfront:
+  #   runs-on: ubuntu-latest
+  #   needs: ["build-frontend-app"]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v1
+
+  #     - name: download artifacts
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: app-dist
+  #         path: ./dist
+
+  #     - name: Tar artifacts
+  #       run: |
+  #         mkdir  ./dist
+  #         cp -rv ./dist ./dist
+      
+  #     - name: Configure AWS Credentials
+  #       uses: reggionick/s3-deploy@v3
+  #       with:
+  #         folder: ./dist
+  #         bucket: ${{ secrets.AWS_APP_BUCKET_NAME  }}
+  #         bucket-region: ${{ secrets.AWS_REGION }}
+  #         dist-id: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+  #         invalidation: /
+  #         delete-removed: true
+  #         no-cache: true
+  #         private: true
+
+
+  deploy-app-to-s3:
+    runs-on: ubuntu-latest
+    needs: ["build-frontend-app"]
+   
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: app-dist
+          path: ./dist
+
+      - name: Tar artifacts
+        run: |
+          mkdir  ./dist
+          cp -rv ./dist ./dist
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          aws-region: $AWS_REGION
+      
+      - name: Sync s3
+        run: |
+        aws s3 sync ./dist s3://$DESTINATION_BUCKET 
