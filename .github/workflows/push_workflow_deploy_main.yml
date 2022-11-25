@@ -1,4 +1,4 @@
-name: deploy-to-pilot
+name: deploy-to-s3-bucket
 on:
   push:
     branches:
@@ -8,9 +8,7 @@ env:
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     AWS_REGION: ${{ secrets.AWS_REGION }}
     DESTINATION_BUCKET:  ${{ secrets.AWS_APP_BUCKET_NAME  }}
-
     
-
 jobs:
   
   build-frontend-app:
@@ -102,4 +100,4 @@ jobs:
       
       - name: Sync s3
         run: |
-        aws s3 sync ./dist s3://$DESTINATION_BUCKET 
+          aws s3 sync ./dist s3://$DESTINATION_BUCKET 
