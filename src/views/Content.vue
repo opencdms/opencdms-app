@@ -1,12 +1,14 @@
+
 <template lang="">
-     <opencdms-helloworld></opencdms-helloworld>
+    <opencdms-helloworld></opencdms-helloworld>
 </template>
 <script>
 import "@opencdms/helloworld"
 export default {
-    name: "CustomElementDemo"
+    name: "Content"
 }
 </script>
 <style lang="">
     
 </style>
+

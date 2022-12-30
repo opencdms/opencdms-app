@@ -4,20 +4,27 @@
         "name": "Content",
         "to": "/display",
         "icon": "cil-drop",
-        "display": true
+        "routeName": "Content",
+        "display": true,
+        "package": "@opencdms/helloworld" 
       },
       {
         "component": "CNavItem",
         "name": "Hidden",
         "to": "/hidden",
+        "routeName": "Hidden",
         "icon": "cil-drop",
-        "display": false
+        "display": false,
+        "package": "@opencdms/helloworld"
+
       },
       {
         "component": "CNavItem",
         "name": "Custom Element Demo",
         "to": "/custom-element",
+        "routeName": "CustomElementDemo",
         "icon": "cil-drop",
-        "display": true
+        "display": true,
+        "package": "@opencdms/helloworldre"
       }
 ]
