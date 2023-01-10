@@ -2,16 +2,16 @@ const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.module
       .rule('vue')
       .use('vue-loader')
-      .tap(options => ({
+      .tap((options) => ({
         ...options,
         compilerOptions: {
           // treat any tag that starts with ce- as custom elements
-          isCustomElement: tag => tag.startsWith('opencdms-')
-        }
+          isCustomElement: (tag) => tag.startsWith('opencdms-'),
+        },
       }))
   },
   pwa: {
@@ -21,8 +21,8 @@ module.exports = defineConfig({
     appleMobileWebAppCapable: 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
     manifestOptions: {
-      background_color: '#3c4b64'
-    }
-  }
-  
+      background_color: '#3c4b64',
+    },
+  },
+  publicPath: process.env.NODE_ENV === 'production' ? '/opencdms-app' : '/',
 })
