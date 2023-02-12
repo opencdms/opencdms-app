@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkopencdms_app"]=self["webpackChunkopencdms_app"]||[]).push([[737],{9737:function(e,n,t){t.r(n),t.d(n,{default:function(){return o}});var u=t(3396);const a=(0,u._)("h3",null,"Hidden Page",-1),p=(0,u._)("p",null,"This page will not be shown despite being part of the routes",-1),r=[a,p];function s(e,n,t,a,p,s){return(0,u.wg)(),(0,u.iD)("div",null,r)}var i={name:"HiddenPage"},d=t(89);const l=(0,d.Z)(i,[["render",s]]);var o=l}}]);
+//# sourceMappingURL=737.122a0aaa.js.map
