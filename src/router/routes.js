@@ -1,6 +1,22 @@
 import DefaultLayout from '@/layouts/DefaultLayout'
-import navs from "@/_nav"
+import navs from "@/_nav.js"
 
+var generateOtherRoutes = (navs) => {
+  let navigableEntries = navs.map((nav) => {
+              if (nav?.to !== undefined ) {
+                const comp = () => import(`../views/${nav.routeName}.vue`)
+                var routeEntry = {
+                   path: nav.to,
+                   name: nav.routeName,
+                   component: comp
+                }
+                
+                return routeEntry;
+              }
+
+          })
+  return navigableEntries
+}
 // Define all the application routes here
 const routes = [
   {
@@ -18,65 +34,11 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
       },
-      {
-        path: '/display',
-        name: 'Display',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "testpageone" */ '@/views/TestPageOne.vue'),
-      },
-      {
-        path: '/hidden',
-        name: 'HiddenPage',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "hiddenpage" */ '@/views/HiddenPage.vue'),
-      },
-      {
-        path: '/custom-element',
-        name: 'CustomElementDemo',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "hiddenpage" */ '@/views/CustomElementDemo.vue'),
-      },
+      ...generateOtherRoutes(navs)
     ],
   },
 ]
 
 
 
-
-
-// Removes undisplayed pages from application routes
-var processRoutes = (navs) => {
-    let displayed = [];
-    let displayedPaths = navs.map((nav) => {
-                if (nav?.to !== undefined ) {
-                    return nav.to;
-                }
-            })
-    routes.forEach((route) => {
-        let children = []
-        if (displayedPaths.includes(route.path) || displayedPaths.includes(route?.redirect)){
-            if (Array.isArray(route?.children)){
-                route.children.map((child) => {
-                    if (displayedPaths.includes(child.path) || displayedPaths.includes(child?.redirect)){
-                        children.push(child)
-                    }
-            })
-             route.children = children
-            } 
-            displayed.push(route)
-        }
-        
-    })
-    return displayed;
-}
-
-export default processRoutes(navs);
+export default routes;

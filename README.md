@@ -41,6 +41,8 @@ eg
         "to": "/hidden", // Path must correspond to the route path declared in src/routes/route.js 
         "icon": "cil-drop", // Display icon
         "display": false // will not be displayed and user will not be able to see this page
+        "routeName": "Hidden", // The vuejs routename for this entry
+        "package": "@opencdms/hidden" // The npm package name of the webcomponent to be rendered in this page
       },
        {
         "component": "CNavItem", // Name of the render component
@@ -48,63 +50,11 @@ eg
         "to": "/test-page", // Path must correspond to the route path declared in src/routes/route.js 
         "icon": "cil-drop", // Display icon
         "display": true // will be displayed
+        "routeName": "Test", // The vuejs routename for this entry
+        "package": "@opencdms/helloworld" // The npm package name of the webcomponent to be rendered in this page
       }
 ]
 
-```
-4. For Nested navigation links, declare all the children links `items: [...]` in the registry.json file but only set the display property on the parent element.
-```
-e.g
-// src/registry.json
-[
-    {   
-        // this entry will not be displayed
-        "component": "CNavItem", 
-        "name": "Nest links",  
-        "to": "/base", 
-        "icon": "cil-drop", 
-        "display": false // This will hide both the parent and child entries
-        "items": [
-             // these entries will not be displayed
-            {
-                "component": "CNavItem",
-                "name": "Test Page",  
-                "to": "/test-page", 
-                "icon": "cil-drop"
-            },
-            {
-                "component": "CNavItem",
-                "name": "Test Page",  
-                "to": "/test-page", 
-                "icon": "cil-drop"
-            }
-        ]
-      },
-      {   
-        // this entry will  be displayed
-        "component": "CNavItem", 
-        "name": "Nest links Visible",  
-        "to": "/base-visible", 
-        "icon": "cil-drop", 
-        "display": true // This will display both the parent and child entries
-        "items": [
-             // these entries will displayed 
-            {
-                "component": "CNavItem",
-                "name": "Test Page",  
-                "to": "/test-page-shown", 
-                "icon": "cil-drop"
-            },
-            {
-                "component": "CNavItem",
-                "name": "Test Page",  
-                "to": "/test-page-show", 
-                "icon": "cil-drop"
-            }
-        ]
-      }
-]
-```
 
 ### Web Components
 
@@ -116,10 +66,11 @@ To render a web component:
 
 2. Ensure that the tagname of the web component is prefixed with `opencdms-` eg `<opencdms-helloworld>....</opencdms-helloworld>`.
 
-3. Create a  view page in `src/views` where the component would be rendered in. An example has been done in `src/views/CustomElementDemo.vue`.
+3. Install the webcomponent by running npm install --save @opencdms/webcomponentName.
 
-4. Create a route entry in `src/routes` for the page created in step 3 above.
+4. Create a registry entry in src/registry.json for the page created above. Set the display to true or false as you desire.
 
-5. Create a registry entry in src/registry.json for the page created above. Set the display to true or false as you desire.
+5. Generate the view files by running `npm run views:generate`
+The generated view filenames in src/views folder corresponds to the routeName property in the registry.json file hence routeName property must be unique. You can customise the generated view files as you want. Running the views:generate command does not overwrite existing files.
 
-6. Launch the application.
+6. Launch the application. npm run serve 
