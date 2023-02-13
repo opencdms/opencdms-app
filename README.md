@@ -23,7 +23,7 @@ npm run lint
 
 ## App Configuration
 
-This application can be configured to selectively display pages declared in the route list. By default, only the ,Dashboard link will appear on the sidebar navigation menu. To add more links in the sidebar menu:
+This application can be configured to selectively display pages declared in the route list. By default, only the Dashboard link will appear on the sidebar navigation menu. To add more links in the sidebar menu:
 
 1.  All the routes would be declared as the src/routes/routes.js as in a normal vuejs application.
 2.  Go to  `src/registry.json` file. Each entry in the registry represents a navigation link. 
@@ -31,8 +31,9 @@ This application can be configured to selectively display pages declared in the 
 
 This implies that the registry entries set to false would not be available in the application.
 
-```
+
 eg
+```
 // src/registry.json
 [
     {
@@ -54,11 +55,11 @@ eg
         "package": "@opencdms/helloworld" // The npm package name of the webcomponent to be rendered in this page
       }
 ]
-
+```
 
 ### Web Components
 
-We can render webcomponets built using any javascript framework in this application shell.
+We can render web components built using any javascript framework in this application shell.
 
 To render a web component:
 
