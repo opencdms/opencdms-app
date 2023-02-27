@@ -1,30 +1,82 @@
 [
       {
-        "component": "CNavItem",
+        "component": "VListItem",
         "name": "Content",
         "to": "/display",
-        "icon": "cil-drop",
+        "icon": "mdi-star",
         "routeName": "Content",
         "display": true,
-        "package": "@opencdms/helloworld" 
+        "package": "@opencdms/helloworld"
       },
       {
-        "component": "CNavItem",
+        "component": "VListItem",
         "name": "Hidden",
         "to": "/hidden",
-        "routeName": "Hidden",
-        "icon": "cil-drop",
+        "routeName": "HiddenPage",
+        "icon": "mdi-star",
         "display": false,
         "package": "@opencdms/helloworld"
-
       },
       {
-        "component": "CNavItem",
-        "name": "Custom Element Demo",
+        "component": "VListItem",
+        "name": "CustomElementDemo",
         "to": "/custom-element",
         "routeName": "CustomElementDemo",
-        "icon": "cil-drop",
+        "icon": "mdi-star",
         "display": true,
-        "package": "@opencdms/helloworldre"
+        "package": "@opencdms/helloworld"
+      },
+      {
+        "component": "VListGroup",
+        "name": "Stations",
+        "icon": "mdi-table",
+        "display": true,
+        "pacakge": "@opencdms/groupDemo",
+        "items": [
+          {
+            "component": "VListItem",
+            "name": "List",
+            "to": "/station-list",
+            "routeName": "StationTable",
+            "icon": "mdi-table",
+            "display": true,
+            "package": "@opencdms/stationTableDemo"
+          },
+          {
+            "component": "VListItem",
+            "name": "Map",
+            "to": "/station-map",
+            "routeName": "StationMap",
+            "icon": "mdi-table",
+            "display": true,
+            "package": "@opencdms/stationMap"
+          },
+          {
+            "component": "VListItem",
+            "name": "Combined",
+            "to": "/station-map-list",
+            "routeName": "StationMapList",
+            "icon": "mdi-table",
+            "display": true,
+            "package": "@opencdms/combinedStationMapDemo"
+          }
+        ]},
+      {
+        "component": "VListItem",
+        "name": "Map",
+        "to": "/map",
+        "routeName": "Map",
+        "icon": "mdi-table",
+        "display": true,
+        "package": "@opencdms/mapDemo"
+      },
+      {
+        "component": "VListItem",
+        "name": "Form demo",
+        "to": "/form1",
+        "routeName": "Form1",
+        "icon": "mdi-star",
+        "display": true,
+        "package": "@opencdms/formDemo"
       }
 ]

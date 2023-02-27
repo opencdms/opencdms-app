@@ -18,15 +18,16 @@ function isPackageInstalled(packageName) {
     } catch (error) {
         return false;
     }
-      
+
 }
 
 function generatePages(navs) {
 
-       
+
         navs.map( (nav) =>  {
-            if (nav?.to !== undefined && nav.routeName !== "Dashboard" ) {
-                // Page is the name of the opencdms commponent 
+            if (nav.to !== undefined && nav.routeName !== "Dashboard" ) {
+                // Page is the name of the opencdms commponent
+                console.log(nav)
                 let parts = nav.package.split("/")
                 if (parts[0] !== "@opencdms"){
                      console.log(`Package name must be prefixed by @opencdms but got ${parts[0]}`)
@@ -52,7 +53,7 @@ export default {
 }
 </script>
 <style lang="">
-    
+
 </style>
 
 `               // The view filename is generated from the route name
@@ -63,10 +64,10 @@ export default {
                         console.error(`${viewFile} already exists`);
                         return;
                       }
-                  
+
                       throw err;
                     }
-                  
+
                     try {
                         var writeStream = fs.createWriteStream(`${__dirname}/views/${name}.vue`);
                         writeStream.write(template);
@@ -76,7 +77,7 @@ export default {
                         if (err) throw err;
                       });
                     }
-                  });  
+                  });
             }
         })
     }

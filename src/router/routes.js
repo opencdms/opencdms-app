@@ -2,18 +2,22 @@ import DefaultLayout from '@/layouts/DefaultLayout'
 import navs from "@/_nav.js"
 
 var generateOtherRoutes = (navs) => {
-  let navigableEntries = navs.map((nav) => {
-              if (nav?.to !== undefined ) {
-                const comp = () => import(`../views/${nav.routeName}.vue`)
-                var routeEntry = {
-                   path: nav.to,
-                   name: nav.routeName,
-                   component: comp
+  let navigableEntries = [];
+  navs.map((nav) => {
+              if (nav.component === "VListItem"){
+                if (nav.to !== undefined ) {
+                  const comp = () => import(`../views/${nav.routeName}.vue`)
+                  var routeEntry = {
+                     path: nav.to,
+                     name: nav.routeName,
+                     component: comp
+                  }
+                  navigableEntries = [...navigableEntries, routeEntry];
                 }
-                
-                return routeEntry;
+              }else if(nav.component === "VListGroup"){
+                let items = generateOtherRoutes(nav.items)
+                navigableEntries = [...navigableEntries, ...items];
               }
-
           })
   return navigableEntries
 }
@@ -38,7 +42,5 @@ const routes = [
     ],
   },
 ]
-
-
 
 export default routes;
