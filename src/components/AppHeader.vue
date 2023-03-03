@@ -1,38 +1,17 @@
 <template>
-  <CHeader position="sticky" class="mb-4">
-    <CContainer fluid>
-      <CHeaderToggler class="ps-1" @click="$store.commit('toggleSidebar')">
-        <CIcon icon="cil-menu" size="lg" />
-      </CHeaderToggler>
-      <CHeaderBrand class="mx-auto d-lg-none" to="/">
-          OpenCDMS
-        <!-- <CIcon :icon="logo" height="48" alt="Logo" /> -->
-      </CHeaderBrand>
-      <CHeaderNav>
-        <AppHeaderDropdownAccnt />
-      </CHeaderNav>
-    </CContainer>
-    <CHeaderDivider />
-    <CContainer fluid>
-      <AppBreadcrumb />
-    </CContainer>
-  </CHeader>
+  <v-app-bar>
+    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar-title>OpenCDMS Demo</v-app-bar-title>
+  </v-app-bar>
 </template>
-
 <script>
-import AppBreadcrumb from './AppBreadcrumb'
-import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
-import logo from '@/assets/brand/logo_opencdms.png'
-export default {
-  name: 'AppHeader',
-  components: {
-    AppBreadcrumb,
-    AppHeaderDropdownAccnt,
-  },
-  setup() {
-    return {
-      logo,
-    }
-  },
-}
+  import { VAppBar, VAppBarNavIcon, VAppBarTitle } from 'vuetify/lib/components'
+  export default {
+    name: 'AppHeader',
+    components: {
+      VAppBar,
+      VAppBarNavIcon,
+      VAppBarTitle
+    },
+  };
 </script>
