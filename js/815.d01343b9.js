@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkopencdms_app"]=self["webpackChunkopencdms_app"]||[]).push([[815],{76712:function(n,e,a){a.r(e),a.d(e,{default:function(){return u}});var o=a(73396);const p={id:"map"};function c(n,e,a,c,t,d){const r=(0,o.up)("BaseMap");return(0,o.wg)(),(0,o.iD)("div",p,[(0,o.Wm)(r,{center:[46.2276,6.1443],zoom:15,onMapLoaded:n.onMapLoaded},null,8,["center","onMapLoaded"])])}var t=a(81736),d={components:{BaseMap:t.Z}},r=a(40089);const s=(0,r.Z)(d,[["render",c]]);var u=s}}]);
+//# sourceMappingURL=815.d01343b9.js.map
