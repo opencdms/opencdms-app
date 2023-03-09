@@ -71,7 +71,7 @@
             // set type of marker
             marker.type = "host"
             // add popup to marker
-            marker.bindPopup('<h3>' + feature.properties.id + '</h3>')
+            marker.bindPopup('<h3><a href="http://localhost:5000/collections/ca_stations/items/'+feature.id+'">' + feature.properties.id + '</a></h3>')
             // add to cluster
             cluster.addLayer(marker)
           }))
@@ -96,15 +96,16 @@
 function convertToGeoJson(data) {
   const geoJsonData = data.map(d => {
     // extract the coordinates from WKT string and create a LatLng object
-    const coords = d.cdm_location.match(/POINT\(\s+([-\d\.]+)\s+([-\d\.]+)\)/);
+    const coords = d.location.match(/POINT\(([-\d\.]+) ([-\d\.]+)\)/);
+    console.log(coords)
     const latlng = [parseFloat(coords[1]), parseFloat(coords[2])];
     return {
       //type: 'FeatureCollection',
       //features: [{
-        id: d.cdm_id,
+        id: d.id,
         type: 'Feature',
         properties: {
-          id: d.cdm_name,
+          id: d.name,
           selected: false
           // add any additional properties here
         },

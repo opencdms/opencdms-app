@@ -3,7 +3,7 @@
     <AppSidebar app/>
     <AppHeader app/>
     <v-main app>
-      <v-container fluid class="d-flex justify-center align-center text-h5" style="height: calc(100vh - 110px);">
+      <v-container fluid class="justify-center align-center text-h5" style="height: calc(100vh - 110px); overflow:auto; padding: 10px;">
          <router-view/>
       </v-container>
     </v-main>

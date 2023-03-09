@@ -10,7 +10,8 @@ var generateOtherRoutes = (navs) => {
                   var routeEntry = {
                      path: nav.to,
                      name: nav.routeName,
-                     component: comp
+                     component: comp,
+                     props: nav.props
                   }
                   navigableEntries = [...navigableEntries, routeEntry];
                 }

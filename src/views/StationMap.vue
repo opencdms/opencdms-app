@@ -3,6 +3,7 @@
       <StationMap/>
   </div>
 </template>
+
 <script>
   import { defineComponent } from 'vue'
   import StationMap from './../web-components/stationMap.vue'

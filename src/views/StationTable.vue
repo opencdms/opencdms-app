@@ -8,6 +8,7 @@
 <style>
 .scroll-x {
   overflow-x: auto;
+  overflow-y: auto;
 }
 .v-data-table tbody tr td {
   font-size: 0.8rem;

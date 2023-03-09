@@ -73,8 +73,8 @@
       {
         "component": "VListItem",
         "name": "Form demo",
-        "to": "/form1",
-        "routeName": "Form1",
+        "to": "/form2/",
+        "routeName": "Form2",
         "icon": "mdi-star",
         "display": true,
         "package": "@opencdms/formDemo"

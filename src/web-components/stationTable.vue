@@ -66,7 +66,7 @@ export default defineComponent({
 
     const filteredData = computed( () => {
       if (selected.value.length > 0){
-        return data.value.filter( (item) => selected.value.includes( item.cdm_id ) )
+        return data.value.filter( (item) => selected.value.includes( item.id ) )
       } else {
         return data.value;
       }

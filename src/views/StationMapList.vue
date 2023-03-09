@@ -1,7 +1,7 @@
 <template>
-  <div style="display: flex; flex-direction: column; height: 100%; width: 100%; padding: 0px;">
+  <div style="display: flex; flex-direction: column; height: 100%; width: 100%; padding: 0px;">23
     <StationMap id="map" style="flex-grow: 1; width:100%;" :selectEnabled="true" ></StationMap>
-    <stationTable class="scroll-x" style="height: 40%; padding: 20px margin: 20px;"></stationTable>
+    <stationTable class="scroll-x" style="height: 50%; padding: 20px margin: 20px;"></stationTable>
   </div>
 </template>
 

@@ -145,19 +145,28 @@ const AppSidebarFactory = defineComponent({
         }
     }
     // iterate over items in nav and apply renderItem
-    return() => createVNode(
-      VNavigationDrawer,
-      {},
-      {
-        default: () => createVNode(
-          VList,
-          {},
-          {
-            default: () => (nav.map( (item) => renderItem(item, { isActive: isActiveItem(route, item) })))
-          }
-        )
-      }
-    )
+//    return() => createVNode(
+//      VNavigationDrawer,
+//      {
+//
+//      },
+//      {
+//        default: () => createVNode(
+//          VList,
+//          {},
+//          {
+//            default: () => (nav.map( (item) => renderItem(item, { isActive: isActiveItem(route, item) })))
+//          }
+//        )
+//      }
+//    )
+      return() => createVNode(
+        VList,
+        {},
+        {
+          default: () => (nav.map( (item) => renderItem(item, { isActive: isActiveItem(route, item) })))
+        }
+      )
   }
 })
 
