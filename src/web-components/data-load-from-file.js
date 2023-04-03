@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
 
-import {store} from './../store/dataStore'
+import {store} from './../store/data-store'
 
 console.log("Store")
 

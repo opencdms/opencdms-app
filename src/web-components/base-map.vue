@@ -3,14 +3,14 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import { VCard, VCardTitle, VCardText } from 'vuetify/lib/components';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet'
 import "leaflet-lasso";
 
-
 export default defineComponent({
-  name: "BaseMap",
+  name: "base-map",
   props: {
     center: {
       type: Object,
@@ -28,6 +28,11 @@ export default defineComponent({
   data(){
     return {
     }
+  },
+  components: {
+    VCard,
+    VCardTitle,
+    VCardText,
   },
   setup( props, {emit} ) {
     const mapContainer = ref("map");
