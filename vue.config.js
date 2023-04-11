@@ -24,5 +24,4 @@ module.exports = defineConfig({
       background_color: '#3c4b64',
     },
   },
-  publicPath: process.env.NODE_ENV === 'production' ? '/opencdms-app' : '/',
 })
