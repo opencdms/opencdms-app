@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkopencdms_app"]=self["webpackChunkopencdms_app"]||[]).push([[230],{53230:function(n,e,t){t.r(e),t.d(e,{default:function(){return p}});var a=t(73396);const u=(0,a._)("h3",null,"This is the first default view",-1),r=(0,a._)("p",null,"Default Content is not available. Please configure your application to start",-1),s=[u,r];function i(n,e,t,u,r,i){return(0,a.wg)(),(0,a.iD)("div",null,s)}var l={name:"Dashboard"},o=t(40089);const c=(0,o.Z)(l,[["render",i]]);var p=c}}]);
-//# sourceMappingURL=230.87d8424b.js.map
