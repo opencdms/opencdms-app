@@ -3,14 +3,14 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue';
+import { VCard, VCardTitle, VCardText } from 'vuetify/lib/components';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet'
 import "leaflet-lasso";
 
-
 export default defineComponent({
-  name: "BaseMap",
+  name: "base-map",
   props: {
     center: {
       type: Object,
@@ -29,23 +29,23 @@ export default defineComponent({
     return {
     }
   },
+  components: {
+    VCard,
+    VCardTitle,
+    VCardText,
+  },
   setup( props, {emit} ) {
     const mapContainer = ref("map");
     const map = ref(null);
     onMounted( () =>{
-      console.log("mounted")
       map.value = L.map(mapContainer.value, {zoomAnimation:false}).setView( props.center, props.zoom );
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; OpenStreetMap contributors'}).addTo(map.value);
       emit('mapLoaded', map.value);
-
       if ( props.selectEnabled ){
         const lasso = new L.Control.Lasso();
         map.value.addControl(lasso)
       }
     })
-
-
-
     return {mapContainer};
   }
 })

@@ -1,24 +1,134 @@
 <template>
+  <v-navigation-drawer>
+    <OpenCDMSLogo/>
+    <v-list :lines="false" density="compact" nav>
+    <v-list-item router :to="{name: 'dashboard'}" prepend-icon="mdi-home" title="dashboard"/>
+    <v-list-group value="Stations">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-map-marker" title="Stations"></v-list-item>
+      </template>
+      <v-list-item router :to="{name: 'station-map'}" prepend-icon="mdi-map" title="station-map"/>
+      <v-list-item router :to="{name: 'station-list'}" prepend-icon="mdi-table" title="station-list"/>
+      <!--<v-list-item router :to="{name: 'station'}" prepend-icon="mdi-form-select" title="station"/>-->
+    </v-list-group>
+    <v-divider/>
 
-    <AppSidebarFactory/>
+    <v-list-group value="Sensors">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-thermometer" title="Sensors"/>
+      </template>
+      <v-list-item router :to="{name: 'sensor-list'}" prepend-icon="mdi-table" title="sensor-list"/>
+      <v-list-item router :to="{name: 'sensor'}" prepend-icon="mdi-form-select" title="sensor"/>
+    </v-list-group>
+    <v-divider/>
 
+
+    <v-list-group value="Deployments">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-cog-clockwise" title="Deployments"/>
+      </template>
+      <v-list-item router :to="{name: 'deployment-list'}" prepend-icon="mdi-table" title="deployment-list"/>
+      <v-list-item router :to="{name: 'deployment'}" prepend-icon="mdi-form-select" title="deployment"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="Features">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-map-marker-circle" title="Features"/>
+      </template>
+      <v-list-item router :to="{name: 'feature-map'}" prepend-icon="mdi-map" title="feature-map"/>
+      <v-list-item router :to="{name: 'feature-list'}" prepend-icon="mdi-table" title="feature-list"/>
+      <v-list-item router :to="{name: 'feature'}" prepend-icon="mdi-form-select" title="feature"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="Data">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-table" title="Data"/>
+      </template>
+      <v-list-item router :to="{name: 'data-ingest'}" prepend-icon="mdi-spirit-level" title="data-ingest"/>
+      <v-list-item router :to="{name: 'data-extract'}" prepend-icon="mdi-spirit-level" title="data-extract"/>
+      <v-list-item router :to="{name: 'data-inventory'}" prepend-icon="mdi-spirit-level" title="data-inventory"/>
+      <v-list-item router :to="{name: 'data-map'}" prepend-icon="mdi-spirit-level" title="data-map"/>
+      <v-list-item router :to="{name: 'data-station'}" prepend-icon="mdi-spirit-level" title="data-station"/>
+      <v-list-item router :to="{name: 'data-parameter'}" prepend-icon="mdi-spirit-level" title="data-parameter"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="Forms">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Forms"/>
+      </template>
+      <v-list-item router :to="{name: 'observation-form'}" prepend-icon="mdi-spirit-level" title="observation-form"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="Products">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Products"/>
+      </template>
+      <v-list-item router :to="{name: 'product-climate-normal'}" prepend-icon="mdi-spirit-level" title="product-climate-normal"/>
+      <v-list-item router :to="{name: 'product-climat'}" prepend-icon="mdi-spirit-level" title="product-climat"/>
+      <v-list-item router :to="{name: 'product-daycli'}" prepend-icon="mdi-spirit-level" title="product-daycli"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="Quality control">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Quality control"/>
+      </template>
+      <v-list-item router :to="{name: 'quality-control'}" prepend-icon="mdi-spirit-level" title="quality-control"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="Settings">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Settings"/>
+      </template>
+      <v-list-item router :to="{name: 'settings-user'}" prepend-icon="mdi-spirit-level" title="settings-user"/>
+    </v-list-group>
+    <v-divider/>
+
+    <v-list-group value="WIS2">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="WIS2"/>
+      </template>
+    <v-list-item router :to="{name: 'wis2-publication'}" prepend-icon="mdi-spirit-level" title="wis2-publication"/>
+    <v-list-item router :to="{name: 'wis2-subscription'}" prepend-icon="mdi-spirit-level" title="wis2-subscription"/>
+    </v-list-group>
+    <v-divider/>
+
+    </v-list>
+
+  </v-navigation-drawer>
 </template>
 
 <script>
-  import { VNavigationDrawer, VIcon, VList, VListItem, VListItemTitle, VImg } from 'vuetify/lib/components'
+  import { VNavigationDrawer, VIcon, VListGroup, VList, VListItem, VListItemTitle, VImg, VDivider } from 'vuetify/lib/components'
   import { computed } from 'vue'
   import { useStore } from 'vuex'
-  import { AppSidebarFactory } from './AppSidebarFactory'
+  import OpenCDMSLogo from './../web-components/opencdmsLogo'
   export default {
     name: 'AppSidebar',
+    data () {
+      return {
+        drawer: true,
+        rail: true,
+      }
+    },
     components: {
-      AppSidebarFactory,
       VNavigationDrawer,
-      VImg
+      VImg,
+      VList,
+      VListGroup,
+      VListItem,
+      VDivider,
+      OpenCDMSLogo
     },
     setup() {
       const store = useStore()
       return {  }
     },
   };
+
 </script>

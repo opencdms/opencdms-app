@@ -1,82 +1,227 @@
 [
-      {
-        "component": "VListItem",
-        "name": "Content",
-        "to": "/display",
-        "icon": "mdi-star",
-        "routeName": "Content",
-        "display": true,
-        "package": "@opencdms/helloworld"
-      },
-      {
-        "component": "VListItem",
-        "name": "Hidden",
-        "to": "/hidden",
-        "routeName": "HiddenPage",
-        "icon": "mdi-star",
-        "display": false,
-        "package": "@opencdms/helloworld"
-      },
-      {
-        "component": "VListItem",
-        "name": "CustomElementDemo",
-        "to": "/custom-element",
-        "routeName": "CustomElementDemo",
-        "icon": "mdi-star",
-        "display": true,
-        "package": "@opencdms/helloworld"
-      },
-      {
-        "component": "VListGroup",
-        "name": "Stations",
-        "icon": "mdi-table",
-        "display": true,
-        "pacakge": "@opencdms/groupDemo",
-        "items": [
-          {
-            "component": "VListItem",
-            "name": "List",
-            "to": "/station-list",
-            "routeName": "StationTable",
-            "icon": "mdi-table",
-            "display": true,
-            "package": "@opencdms/stationTableDemo"
-          },
-          {
-            "component": "VListItem",
-            "name": "Map",
-            "to": "/station-map",
-            "routeName": "StationMap",
-            "icon": "mdi-table",
-            "display": true,
-            "package": "@opencdms/stationMap"
-          },
-          {
-            "component": "VListItem",
-            "name": "Combined",
-            "to": "/station-map-list",
-            "routeName": "StationMapList",
-            "icon": "mdi-table",
-            "display": true,
-            "package": "@opencdms/combinedStationMapDemo"
-          }
-        ]},
-      {
-        "component": "VListItem",
-        "name": "Map",
-        "to": "/map",
-        "routeName": "Map",
-        "icon": "mdi-table",
-        "display": true,
-        "package": "@opencdms/mapDemo"
-      },
-      {
-        "component": "VListItem",
-        "name": "Form demo",
-        "to": "/form1",
-        "routeName": "Form1",
-        "icon": "mdi-star",
-        "display": true,
-        "package": "@opencdms/formDemo"
-      }
+  {
+    "component": "VListItem",
+    "name": "dashboard",
+    "to": "/home",
+    "routeName": "dashboard",
+    "icon": "mdi-home",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "dashboard",
+    "to": "/dashboard",
+    "routeName": "dashboard",
+    "icon": "mdi-home",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-ingest",
+    "to": "/observations/ingest",
+    "routeName": "data-ingest",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-extract",
+    "to": "/observations/extract",
+    "routeName": "data-extract",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-inventory",
+    "to": "/observations/inventory",
+    "routeName": "data-inventory",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-map",
+    "to": "/observations/map",
+    "routeName": "data-map",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-station",
+    "to": "/observations/station",
+    "routeName": "data-station",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-station",
+    "to": "/observations/station/",
+    "routeName": "data-station",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-parameter",
+    "to": "/observations/parameter",
+    "routeName": "data-parameter",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "data-parameter",
+    "to": "/observations/parameter/",
+    "routeName": "data-parameter",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "observation-form",
+    "to": "/observations/forms/",
+    "routeName": "observation-form",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "product-climate-normal",
+    "to": "/products/normals",
+    "routeName": "product-climate-normal",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "product-climate-normal",
+    "to": "/products/normals/",
+    "routeName": "product-climate-normal",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "product-climat",
+    "to": "/products/monthly",
+    "routeName": "product-climat",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "product-climat",
+    "to": "/products/monthly/",
+    "routeName": "product-climat",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "product-daycli",
+    "to": "/products/daily",
+    "routeName": "product-daycli",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "product-daycli",
+    "to": "/products/daily/",
+    "routeName": "product-daycli",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "quality-control",
+    "to": "/quality-control",
+    "routeName": "quality-control",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "settings-user",
+    "to": "/settings/user/",
+    "routeName": "settings-user",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "wis2-publication",
+    "to": "/wis2/publication",
+    "routeName": "wis2-publication",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "wis2-publication",
+    "to": "/wis2/publication//view",
+    "routeName": "wis2-publication",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "wis2-publication",
+    "to": "/wis2/publication//edit",
+    "routeName": "wis2-publication",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "wis2-subscription",
+    "to": "/wis2/subscriptions",
+    "routeName": "wis2-subscription",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "wis2-subscription",
+    "to": "/wis2/subscriptions//view",
+    "routeName": "wis2-subscription",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
+    "name": "wis2-subscription",
+    "to": "/wis2/subscriptions//edit",
+    "routeName": "wis2-subscription",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  }
 ]
