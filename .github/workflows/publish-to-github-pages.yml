@@ -1,8 +1,7 @@
 name: Build and Deploy
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published, created]  # 'created' is used for draft releases
 permissions:
   contents: write
 jobs:
