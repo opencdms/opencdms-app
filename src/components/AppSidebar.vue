@@ -60,6 +60,11 @@
         <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Forms"/>
       </template>
       <v-list-item router :to="{name: 'observation-form'}" prepend-icon="mdi-spirit-level" title="observation-form"/>
+      <v-list-item router :to="{name: 'host-form'}" prepend-icon="mdi-spirit-level" title="New host / station"/>
+      <v-list-item router :to="{name: 'observer-form'}" prepend-icon="mdi-spirit-level" title="New observer / sensor"/>
+      <v-list-item router :to="{name: 'deployment-form'}" prepend-icon="mdi-spirit-level" title="New deployment"/>
+      <v-list-item router :to="{name: 'source-form'}" prepend-icon="mdi-spirit-level" title="New source"/>
+      <v-list-item router :to="{name: 'collection-form'}" prepend-icon="mdi-spirit-level" title="New collection"/>
     </v-list-group>
     <v-divider/>
 
