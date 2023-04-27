@@ -2,7 +2,7 @@
   <v-navigation-drawer>
     <OpenCDMSLogo/>
     <v-list :lines="false" density="compact" nav>
-    <v-list-item router :to="{name: 'dashboard'}" prepend-icon="mdi-home" title="dashboard"/>
+    <v-list-item router :to="{name: 'home'}" prepend-icon="mdi-home" title="Home"/>
     <v-list-group value="Stations">
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-map-marker" title="Stations"></v-list-item>
