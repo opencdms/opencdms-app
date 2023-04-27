@@ -30,17 +30,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: DefaultLayout,
-    redirect: '/dashboard',
+    redirect: '/home',
     children: [
       {
-        path: '/dashboard',
-        name: 'dashboard',
+        path: '/home',
+        name: 'home',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "dashboard" */ '@/views/dashboard.vue'),
-      },
+          import(/* webpackChunkName: "dashboard" */ '@/views/home.vue'),
       // stations
       // - map
       // - list
