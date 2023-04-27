@@ -3,22 +3,31 @@
     <v-card-title>Stations</v-card-title>
     <v-card-text>
       <VTextField style="width: 400px;" v-model="search" prepend-icon="mdi-text-search" label="search" single-line hide-details></VTextField>
-      <VDataTable v-model:sort-by="sortBy" :headers="headers" :items="items" :search="search" dense small ></VDataTable>
+      <VDataTable :headers="headers" :items="items" :search="search" dense small>
+          <template v-slot:item.id="{ item }">
+            <a :href="getIDLink(item.raw.id)">{{item.raw.id}}</a>
+          </template>
+          <template v-slot:item.links="{ item }">
+            {{parseLinks(item.raw.links)}}
+          </template>
+      </VDataTable>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-import { VCard, VCardTitle, VCardText } from 'vuetify/lib/components';
+import { VCard, VCardTitle, VCardText, VChip } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
 import { ref, computed, watchEffect, watch } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable';
 import { VTextField } from 'vuetify/lib/components';
+import {useRepo} from 'pinia-orm';
+import * as d3 from 'd3';
 
 // opencdms components
-import {loadData} from './data-load-from-file';
-import {store} from './../store/data-store';
+
+import Host from '@/models/Host';
 
 export default defineComponent({
   name: 'station-list',
@@ -33,9 +42,22 @@ export default defineComponent({
     VCardTitle,
     VCardText,
     VDataTable,
-    VTextField
+    VTextField,
   },
-  methods: {},
+  methods: {
+    parseLinks (links) {
+      let res;
+      if( links && links.length > 0 ){
+        res = JSON.stringify(links);
+      }else{
+        res = '';
+      }
+      return res;
+    },
+    getIDLink (id) {
+      return '/#/station/'+id;
+    }
+  },
   setup(props) {
     const headers = ref([]);
     const data = ref([]);
@@ -44,18 +66,59 @@ export default defineComponent({
     const items = ref([]);
     const selected = ref([]);
 
+    const hostRepo = useRepo(Host);
+
+    console.log(useRepo(Host).piniaStore());
+
+    const loadCSV = async (path) => {
+      let csvData;
+      csvData = await d3.dsv('|',path, d3.autoType);
+      return {csvData};
+    };
+
     onMounted( async() => {
-      if (store.getters.getCSVData === null){
-        data.value = await( loadData( props.connection ) );
-      } else {
-        data.value = store.getters.getCSVData.data;
-      }
-      headers.value = Object.keys(data.value[0]).map( key => ({
-        title: key.replace("cdm_",""),
-        value: key,
-        sortable: true
-      }))
-      items.value = data.value;
+      /*
+      if( hostRepo.all().length === 0){
+        loadCSV("/data/hosts.psv").then( (result) => {
+          const data = ref(null);
+          data.value = result.csvData;
+          for (let i = 0; i < data.value.length; i++) {
+            data.value[i].links = JSON.parse(data.value[i].links);
+            //console.log(JSON.parse(data.value[i].links));
+          }
+          hostRepo.save(data.value);
+          headers.value = Object.keys(data.value[0]).map( key => ({
+            //title: key.replace("cdm_",""),
+            title: key,
+            value: key,
+            key: key,
+            sortable: true
+          }));
+          console.log(hostRepo.all()) ;
+          items.value = hostRepo.all();
+        });
+      }else{
+      */
+        items.value = hostRepo.all();
+        headers.value = Object.keys(items.value[0]).map( key => ({
+            //title: key.replace("cdm_",""),
+          title: key,
+          value: key,
+          key: key,
+          sortable: true
+        }));
+        console.log(hostRepo.all()) ;
+      //}
+
+      console.log(headers);
+      console.log(hostRepo.all());
+
+      //items.value = hostRepo.all();
+      //console.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++ ")
+      //console.log(items.value);
+      //hostRepo.save(items.value);
+      //console.log(hostRepo.all());
+      //console.log(" ------------------------------------------------------ ")
     });
     return {headers, items, search, sortBy};
   }

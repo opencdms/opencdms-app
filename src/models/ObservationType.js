@@ -7,15 +7,16 @@ export default class ObservationType extends Model {
   static entity = 'observation_type';
   static fields() {
     return {
-      id: this.number(null),
+      id: this.string(''),
+      authority: this.string(''),
       name: this.string(''),
       description: this.string(''),
       links: this.attr(new LinksType([])),
       _version: this.number(null),
       _change_date: this.string(''),
-      _user_id: this.number(null),
+      _user_id: this.string(''),
       _user: this.belongsTo(User,'_user_id'),
-      _status_id: this.number(null),
+      _status_id: this.string(''),
       _status: this.belongsTo(Status,'_status_id'),
       comments: this.string('')
     };

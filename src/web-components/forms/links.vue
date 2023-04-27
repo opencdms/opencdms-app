@@ -5,10 +5,10 @@
       <v-card v-for="(link, index) in links" :key="index">
         <v-container>
           <v-row>
-            <v-col cols="2"><v-text-field v-model="link.rel" label="rel" hint="IANA link relation, e.g. canonical, alternate" persistent-hint></v-text-field></v-col>
-            <v-col cols="3"><v-text-field v-model="link.href" label="href" hint="URL for link" persistent-hint></v-text-field></v-col>
-            <v-col cols="2"><v-text-field v-model="link.type" label="link type" hint="Result/link type, e.g. text/html" persistent-hint></v-text-field></v-col>
-            <v-col cols="4"><v-text-field v-model="link.title" label="title" hint="Title / name of link" persistent-hint></v-text-field></v-col>
+            <v-col cols="2"><v-text-field v-model="link.rel" label="rel" hint="IANA link relation, e.g. canonical, alternate" persistent-hint v-model.lazy="value"></v-text-field></v-col>
+            <v-col cols="3"><v-text-field v-model="link.href" label="href" hint="URL for link" persistent-hint v-model.lazy="value"></v-text-field></v-col>
+            <v-col cols="2"><v-text-field v-model="link.type" label="link type" hint="Result/link type, e.g. text/html" persistent-hint v-model.lazy="value"></v-text-field></v-col>
+            <v-col cols="4"><v-text-field v-model="link.title" label="title" hint="Title / name of link" persistent-hint v-model.lazy="value"></v-text-field></v-col>
             <v-col cols="1"><v-btn color="error" @click="() => removeLink(index)"><v-icon>mdi-close</v-icon></v-btn></v-col>
           </v-row>
         </v-container>
@@ -50,8 +50,6 @@ export default defineComponent({
 
     // Update parent component when `links` changes
     watch( () => props.links, (value) => {
-      console.log("emitting update links");
-      console.log( value);
       context.emit('updateLinks', value);
     }, { deep: true });
 

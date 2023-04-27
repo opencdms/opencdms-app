@@ -11,15 +11,15 @@
   import 'leaflet.markercluster';
 
   // vue / vuetify imports
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref, watchEffect } from 'vue';
   import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
 
-  // opencdms imports
-  import BaseMap from "./../web-components/base-map.vue"
-  import { loadData } from './data-load-from-file';
-  import {store} from './../store/data-store'
+  import {useRepo} from 'pinia-orm';
 
-  console.log(store)
+  // opencdms imports
+  import BaseMap from "./../web-components/maps/base-map.vue"
+  import Host from '@/models/Host';
+  import {loadData} from '@/utils/load-data.js';
 
   export default defineComponent({
     name: 'station-map',
@@ -40,82 +40,80 @@
     data() {
       return {
         map: null,
-        data: null,
-        geojson: null,
-        selected: new Set(),
+        //data: null,
+        //geojson: null,
+        //selected: new Set(),
       }
     },
     components: {
       BaseMap
     },
     methods: {},
-    setup(props) {
-      console.log("setting up map")
-      const onMapLoaded = (map) => {
+    setup(props, context) {
+      const features = ref([]);
+      const hostRepo = useRepo(Host);
+
+      const getFeatures = async () => {
+        let data;
+        if( hostRepo.all().length === 0){
+          await loadData('/data/hosts.psv').then( (result) => { hostRepo.save(result) });
+        }
+        data = await useRepo(Host).where( 'location', (value) => {
+          return value !== "";
+        }).get()
+        features.value = convertToGeoJson(data);
+      };
+
+      const updateMarkers = async() => {
+        // function to update markers when the data changes
+        console.log( "update markers" );
+      }
+
+      getFeatures();
+
+      // load host data
+
+      const onMapLoaded = async (map) => {
+        console.log("setting up map")
+        if ( features.value.length === 0){
+          await getFeatures();
+        }
+        updateMarkers();
         // leaflet cluster marker for clustering
-        const cluster = L.markerClusterGroup();
-        loadData(props.connection).then( data => {
-          const geojson = convertToGeoJson( data );
-          geojson.map( (feature => {
-            // first create marker
-            const marker = L.marker(feature.geometry.coordinates.reverse(), {
-              // Set the marker icon, if desired
-              icon: L.icon({
-                iconUrl: 'marker-icon.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-              }),
-            });
-            // set ID for marker
-            marker.id = feature.id
-            // set type of marker
-            marker.type = "host"
-            // add popup to marker
-            marker.bindPopup('<h3><a href="#/station/'+feature.properties.wsi+'"/>' + feature.properties.id + '</a></h3>')
-            // add to cluster
-            cluster.addLayer(marker)
-          }))
-        });
+        const cluster = L.markerClusterGroup({id: 'hostLayer'});
+        console.log(features.value)
+        features.value.map( (feature => {
+          let coords = feature.geometry.coordinates.reverse();
+          const marker = L.marker(coords, {
+            // Set the marker icon, if desired
+            icon: L.icon({
+              iconUrl: 'marker-icon.png',
+              iconSize: [25, 41],
+              iconAnchor: [12, 41],
+              popupAnchor: [1, -34],
+            }),
+          });
+          // set ID for marker
+          marker.id = feature.id;
+          // set type of marker
+          marker.type = "host";
+          // add popup to marker
+          marker.bindPopup('<h3><a href="#/station/'+feature.id+'"/>' + feature.properties.name + '</a></h3>');
+          //marker.bindTooltip( 'name: ' + feature.properties.name);
+          // add to cluster
+          cluster.addLayer(marker);
+        }));
         map.addLayer(cluster)
         console.log("map loaded")
       }
-      // lifecycle hooks
-      onBeforeMount( () => {
-        // This hook is called before the component is mounted to the DOM.
-        // This is a good place to do any necessary setup before the component is visible.
-      });
-      onMounted( () => {
-        // This hook is called after the component is mounted to the DOM.
-        // This is a good place to perform any necessary DOM manipulations, initialize
-        // third-party libraries, or set up event listeners.
-      });
-      onBeforeUpdate( () => {
-        // This hook is called when a component's data changes, but before the DOM is re-rendered.
-        // This is a good place to make any necessary calculations or changes before the component
-        // is updated.
-      });
-      onUpdated( () => {
-        // This hook is called after the component is updated and the DOM is re-rendered.
-        // This is a good place to perform any necessary DOM manipulations or update third-party
-        // libraries.
-      });
-      onBeforeUnmount( () => {
-        // This hook is called before the component is unmounted from the DOM.
-        // This is a good place to clean up any resources or event listeners that were set up in
-        // onMounted.
-      });
-      onUnmounted( () => {
-        // This hook is called after the component is unmounted from the DOM.
-        // This is a good place to perform any final cleanup or tear down of resources.
-      });
-      onErrorCaptured( () => {});
+
       return {onMapLoaded};
     }
   });
 
-
+  // the following to be moved to utils
   function convertToGeoJson(data) {
+  console.log(data);
   const geoJsonData = data.map(d => {
     // extract the coordinates from WKT string and create a LatLng object
     const coords = d.location.match(/POINT\(([-\d\.]+) ([-\d\.]+)\)/);
@@ -126,8 +124,8 @@
         id: d.id,
         type: 'Feature',
         properties: {
-          id: d.name,
-          wsi: d.wsi,
+          name: d.name,
+          wigos_station_identifier: d.wigos_station_identifier,
           selected: false
           // add any additional properties here
         },

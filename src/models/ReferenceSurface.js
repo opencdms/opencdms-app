@@ -5,8 +5,8 @@ export default class ReferenceSurface extends Model {
   static entity = 'reference_surface';
   static fields() {
     return {
-      id: this.number(null),
-      name: this.number(null),
+      id: this.string(''),
+      name: this.string(''),
       description: this.string('')
     };
   };

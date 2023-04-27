@@ -30,16 +30,16 @@ const routes = [
     path: '/',
     name: 'Home',
     component: DefaultLayout,
-    redirect: '/dashboard',
+    redirect: '/home',
     children: [
       {
-        path: '/dashboard',
-        name: 'dashboard',
+        path: '/home',
+        name: 'home',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "dashboard" */ '@/views/dashboard.vue'),
+          import(/* webpackChunkName: "dashboard" */ '@/views/home.vue'),
       },
       // stations
       // - map
@@ -90,18 +90,26 @@ const routes = [
              path: 'list',
              name: 'station-list',
              component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station-list.vue')
-           }
+           },
+           {
+             path: 'view',
+             name: 'station-viewer',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station.vue'),
+           },
          ]
       },
       {
          path: '/station/:id',
-         name: 'station-viewer',
-         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station.vue'),
          children: [
+           {
+             path: '',
+             name: 'station-viewer-id',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station.vue'),
+           },
            {
              path: 'edit',
              name: 'station-editor',
-             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station.vue')
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/host.vue')
            },
            {
              path: 'history',
@@ -173,19 +181,22 @@ const routes = [
            {
              path: 'map',
              name: 'feature-map',
-             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/feature-map.vue')
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/feature-map2.vue')
            },
            {
              path: 'list',
              name: 'feature-list',
              component: () => import(/* webpackChunkName: "dashboard" */ '@/views/feature-list.vue')
+           },
+           {
+             path: '',
+             name: 'feature-viewer',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/feature.vue')
            }
          ]
       },
       {
          path: '/feature/:id',
-         name: 'feature-viewer',
-         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/feature.vue'),
          children: [
            {
              path: 'edit',
@@ -275,7 +286,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/host-environment.vue'),
       },
       {
-        path: '/forms/climate-zone/create',
+          path: '/forms/climate-zone/create',
         name: 'climate-zone-form',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/climate-zone.vue'),
       },

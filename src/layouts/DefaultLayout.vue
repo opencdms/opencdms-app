@@ -12,11 +12,11 @@
 </template>
 
 <script>
-  import { VApp } from 'vuetify/lib/components'
-  import { VMain, VContainer, VNavigationDrawer } from 'vuetify/lib/components'
-  import AppSidebar from '@/components/AppSidebar'
-  import AppHeader from '@/components/AppHeader'
-  import AppFooter from '@/components/AppFooter'
+  import { VApp } from 'vuetify/lib/components';
+  import { VMain, VContainer, VNavigationDrawer } from 'vuetify/lib/components';
+  import AppSidebar from '@/components/AppSidebar';
+  import AppHeader from '@/components/AppHeader';
+  import AppFooter from '@/components/AppFooter';
   export default {
     components: {
       VApp,

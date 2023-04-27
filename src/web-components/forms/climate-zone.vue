@@ -3,9 +3,15 @@
     <v-card-title>Create new 'ClimateZone'</v-card-title>
     <v-card-text>
         <v-form>
-            <v-card-item><v-text-field label="id" v-model="climateZone.id" type="number" hint="" persistent-hint></v-text-field></v-card-item>
+            <v-card-item><v-text-field label="id" v-model="climateZone.id"  hint="" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="name" v-model="climateZone.name"  hint="" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="description" v-model="climateZone.description"  hint="" persistent-hint></v-text-field></v-card-item>
+            <v-card-item><LinkForm :links="links" @updateLinks="updateLinks" ></LinkForm></v-card-item>
+            <v-card-item><v-text-field label="_version" v-model="climateZone._version" type="number" hint="Version number of this record" persistent-hint></v-text-field></v-card-item>
+            <v-card-item><VueDatePicker label="_change_date" v-model="climateZone._change_date"  hint="Date this record was changed" persistent-hint></VueDatePicker></v-card-item>
+            <v-card-item><v-select :items="userOptions" item-title="name" item-value="id" label="user" v-model="climateZone._user" :hint="userOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-select :items="statusOptions" item-title="name" item-value="id" label="status" v-model="climateZone._status" :hint="statusOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-text-field label="comments" v-model="climateZone.comments"  hint="Free text comments on this record, for example description of changes made etc" persistent-hint></v-text-field></v-card-item>
         </v-form>
         <v-btn @click="createClimateZone">Create ClimateZone</v-btn>
     </v-card-text>
@@ -21,15 +27,32 @@ import {useStore} from 'pinia';
 import {useRepo} from 'pinia-orm';
 
 import LinkForm from '@/web-components/forms/links';
+import VueDatePicker from '@/web-components/pickers/date-picker.vue';
 
 
+import User from '@/models/User';
+import Status from '@/models/Status';
 
 // import model
 import ClimateZone from '@/models/ClimateZone';
 
+import {loadData} from '@/utils/load-data.js';
+
+
 export default defineComponent({
   name: 'ClimateZoneForm',
   props: {
+  },
+  methods:{
+    parseLinks (links) {
+      let res;
+      if( links && links.length > 0 ){
+        res = JSON.stringify(links);
+      }else{
+        res = '';
+      }
+      return res;
+    }
   },
   components: {
     VCard,
@@ -40,15 +63,10 @@ export default defineComponent({
     VSelect,
     VForm,
     VBtn,
+    VueDatePicker,
     LinkForm
   },
   setup() {
-
-    const loadCSV = async (path) => {
-      let csvData;
-      csvData = await d3.dsv('|',path, d3.autoType);
-      return {csvData};
-    };
 
     // set up links object
     const links = ref([]);
@@ -58,6 +76,32 @@ export default defineComponent({
     }
 
     // set up repos
+    const userRepo = useRepo(User);
+    const userOptions = computed(() => { return userRepo.all() });
+    const userOptionsHint = computed(() => {
+      if( climateZone.value._user !== null ){
+        if ( 'description' in climateZone.value._user ){
+          return climateZone.value._user.description;
+        }else{
+          return "";
+        }
+      }else{
+        return "Select user";
+      }
+    } );
+    const statusRepo = useRepo(Status);
+    const statusOptions = computed(() => { return statusRepo.all() });
+    const statusOptionsHint = computed(() => {
+      if( climateZone.value._status !== null ){
+        if ( 'description' in climateZone.value._status ){
+          return climateZone.value._status.description;
+        }else{
+          return "";
+        }
+      }else{
+        return "Select status";
+      }
+    } );
 
     const climateZoneRepo = useRepo(ClimateZone);
     const climateZone = ref(climateZoneRepo.make());
@@ -77,6 +121,10 @@ export default defineComponent({
 
     onBeforeMount( async() => {
       // load reference data so this is available to the form
+      if( userRepo.all().length === 0){loadData('/data/user.psv').then( (result) => { userRepo.save(result) })};
+
+      if( statusRepo.all().length === 0){loadData('/data/status.psv').then( (result) => { statusRepo.save(result) })};
+
     });
 
     return {
@@ -84,7 +132,9 @@ export default defineComponent({
         createClimateZone,
         resetClimateZone,
         links,
-        updateLinks
+        updateLinks,
+        userOptions, userOptionsHint,
+        statusOptions, statusOptionsHint
     }
   }
 });

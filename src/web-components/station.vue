@@ -1,19 +1,26 @@
 <template>
   <v-card>
+    <v-card-title>Select station</v-card-title>
+    <v-card-item><v-autocomplete :items="hostOptions" item-title="name" item-value="id" label="host" return-object persistent-hint></v-autocomplete></v-card-item>
+  </v-card>
+  <v-card>
     <v-card-title>Station: {{ $route.params.id }}</v-card-title>
-
-        <v-card-text><pre>{{single}}</pre></v-card-text>
-
+        <v-card-item><v-card-text><pre>{{single}}</pre></v-card-text></v-card-item>
+        <v-btn @click="edit">Edit</v-btn>
   </v-card>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
-import { VCard, VCardTitle, VCardText, VTabs, VTab } from 'vuetify/lib/components';
+import { defineComponent, ref, watchEffect, computed } from 'vue';
+import { VCard, VCardTitle, VCardText, VCardItem, VTabs, VTab, VBtn, VAutocomplete } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
-import { useRoute } from 'vue-router'
-import {store} from './../store/data-store'
-import {loadData} from './data-load-from-file'
+import { useRoute, useRouter } from 'vue-router';
+
+import {useRepo} from 'pinia-orm';
+
+// opencdms imports
+import Host from '@/models/Host';
+import {loadData} from '@/utils/load-data.js';
 
 export default defineComponent({
   name: 'station',
@@ -27,35 +34,49 @@ export default defineComponent({
     VCard,
     VCardTitle,
     VCardText,
+    VCardItem,
     VTabs,
-    VTab
+    VTab,
+    VBtn,
+    VAutocomplete
   },
   methods: {},
   setup(props) {
+    const router = useRouter();
+
+    // set up repos
+    const hostRepo = useRepo(Host);
+    const hostOptions = computed(() => { return hostRepo.all() });
+
+    const edit = () => {
+      router.push('/station/'+route.params.id+'/edit');
+    };
+
+    const single = ref([]);
+
+    const fetchRecord = async (identifier) => {
+      if( hostRepo.all().length === 0){
+        await loadData('/data/hosts.psv').then( (result) => { hostRepo.save(result) });
+      }
+      single.value = await useRepo(Host).where('id', identifier).get()
+      for (let i = 0; i < single.value.length; i++) {
+        single.value[i].links = JSON.parse(single.value[i].links);
+      }
+    };
+
     const route = useRoute();
     const data = ref([]);
-    const single = ref([]);
     // lifecycle hooks
     onBeforeMount( () => {
       // This hook is called before the component is mounted to the DOM.
       // This is a good place to do any necessary setup before the component is visible.
     });
     onMounted( async() => {
-      // This hook is called after the component is mounted to the DOM.
-      // This is a good place to perform any necessary DOM manipulations, initialize
-      // third-party libraries, or set up event listeners.
-      console.log( route.params )
-      // check if data is loaded, if not load
-      if (store.getters.getCSVData === null){
-        data.value = await( loadData( props.connection ) )
-      } else {
-        data.value = store.getters.getCSVData.data
-      }
-      single.value = data.value.filter(item => item.wsi === route.params.id);
-      for (let i = 0; i < single.value.length; i++) {
-        single.value[i].links = JSON.parse(single.value[i].links);
-      }
+      fetchRecord( route.params.id );
 
+      watchEffect( () => {
+        fetchRecord( route.params.id );
+      });
 
     });
 
@@ -79,7 +100,7 @@ export default defineComponent({
       // This is a good place to perform any final cleanup or tear down of resources.
     });
     onErrorCaptured( () => {});
-    return {single};
+    return {single, edit, hostOptions};
   }
 
 });
