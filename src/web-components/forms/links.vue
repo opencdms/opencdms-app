@@ -20,7 +20,7 @@
 
 <script>
 
-import { defineComponent, ref, watch, context } from 'vue';
+import { defineComponent, ref, watch, context, computed } from 'vue';
 import { VForm, VTextField, VCard, VCardTitle, VBtn, VContainer, VRow, VCol, VIcon } from 'vuetify/lib/components';
 
 import LinksType from "@/models/LinksType.js";
@@ -36,8 +36,11 @@ export default defineComponent({
   },
   props: {
     links: {
-      type: LinksType,
+      type: Array,
       required: true,
+      validator: (value) => {
+       return value.every(link => link instanceof LinksType);
+      }
     },
   },
   emits: ["updateLinks"],
@@ -45,21 +48,26 @@ export default defineComponent({
     const name = ref("");
     const description = ref("");
     const location = ref("");
-    const links = ref(props.links);
-    console.log(props.links)
+
+    const initialLinks = computed( () => {
+      return JSON.parse(props.links);
+    })
+
+    const links = ref(initialLinks);
 
     // Update parent component when `links` changes
-    watch( () => props.links, (value) => {
+    watch( () => links.value, (value) => {
       context.emit('updateLinks', value);
     }, { deep: true });
 
     const addLink = () => {
-      links.value.push({
+      /*links.value.push({
         rel: "",
         href: "",
         type: "",
         title: ""
-      });
+      });*/
+      links.value.push( new LinksType() );
     };
     const removeLink = (index) => {
       links.value = links.value.filter((link, i) => i !== index);
