@@ -116,7 +116,9 @@
   console.log(data);
   const geoJsonData = data.map(d => {
     // extract the coordinates from WKT string and create a LatLng object
-    const coords = d.location.match(/POINT\(([-\d\.]+) ([-\d\.]+)\)/);
+    console.log(d.location);
+    const coords = d.location.match(/POINT\(([-\d\.]+)\s+([-\d\.]+)\)/);
+    console.log(coords);
     const latlng = [parseFloat(coords[1]), parseFloat(coords[2])];
     return {
       //type: 'FeatureCollection',

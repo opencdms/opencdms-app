@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%;" id="map" :selectEnables="selectEnabled"></div>
+  <v-card style="width: 100%; height: 100%;" id="map" :selectEnables="selectEnabled"></v-card>
 </template>
 
 <script>
@@ -46,7 +46,8 @@ export default defineComponent({
       //  const lasso = new L.Control.Lasso();
       //  map.value.addControl(lasso)
       //}
-    })
+    });
+
     return {mapContainer};
   }
 })

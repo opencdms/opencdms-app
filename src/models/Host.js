@@ -39,5 +39,13 @@ export default class Host extends Model {
       comments: this.string('')
     };
   };
+  static saving (model) {};
+  static saved (model) { };
+  static creating(model) {};
+  static created(model) {};
+  static deleting(model) {};
+  static deleted (model) {};
+  static updating (model) {};
+  static updated (model) {};
 };
 

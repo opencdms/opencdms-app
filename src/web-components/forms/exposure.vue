@@ -4,7 +4,7 @@
     <v-card-text>
         <v-form>
             <v-card-item><v-text-field label="id" v-model="exposure.id"  hint="" persistent-hint></v-text-field></v-card-item>
-            <v-card-item><v-text-field label="name" v-model="exposure.name" type="number" hint="" persistent-hint></v-text-field></v-card-item>
+            <v-card-item><v-text-field label="name" v-model="exposure.name"  hint="" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="description" v-model="exposure.description"  hint="Description of sensor exposure according to WMO-No. 8" persistent-hint></v-text-field></v-card-item>
             <v-card-item><LinkForm :links="links" @updateLinks="updateLinks" ></LinkForm></v-card-item>
             <v-card-item><v-text-field label="_version" v-model="exposure._version" type="number" hint="Version number of this record" persistent-hint></v-text-field></v-card-item>
@@ -35,9 +35,6 @@ import Status from '@/models/Status';
 
 // import model
 import Exposure from '@/models/Exposure';
-
-import {loadData} from '@/utils/load-data.js';
-
 
 export default defineComponent({
   name: 'ExposureForm',
@@ -117,15 +114,6 @@ export default defineComponent({
     const resetExposure = () => {
         Object.assign(exposure.value, exposureRepo.make() );
     };
-
-
-    onBeforeMount( async() => {
-      // load reference data so this is available to the form
-      if( userRepo.all().length === 0){loadData('/data/user.psv').then( (result) => { userRepo.save(result) })};
-
-      if( statusRepo.all().length === 0){loadData('/data/status.psv').then( (result) => { statusRepo.save(result) })};
-
-    });
 
     return {
         exposure,

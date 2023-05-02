@@ -20,10 +20,8 @@
 
 <script>
 
-import { defineComponent, ref, watch, context, computed } from 'vue';
+import { defineComponent, ref, watch, context, computed, toRaw } from 'vue';
 import { VForm, VTextField, VCard, VCardTitle, VBtn, VContainer, VRow, VCol, VIcon } from 'vuetify/lib/components';
-
-import LinksType from "@/models/LinksType.js";
 
 export default defineComponent({
   name: 'LinkForm',
@@ -37,23 +35,23 @@ export default defineComponent({
   props: {
     links: {
       type: Array,
-      required: true,
-      validator: (value) => {
-       return value.every(link => link instanceof LinksType);
-      }
+      required: true
     },
   },
   emits: ["updateLinks"],
   setup(props, context) {
     const name = ref("");
     const description = ref("");
-    const location = ref("");
+    //const location = ref("");
+    const links = ref(props.links);
 
-    const initialLinks = computed( () => {
-      return JSON.parse(props.links);
-    })
-
-    const links = ref(initialLinks);
+    watch( () => props.links, (value) => {
+      if( typeof value === 'string'){
+        links.value = JSON.parse(value);
+      }else{
+        links.value = value;
+      }
+    }, {immediate: true, deep: true} );
 
     // Update parent component when `links` changes
     watch( () => links.value, (value) => {
@@ -61,13 +59,12 @@ export default defineComponent({
     }, { deep: true });
 
     const addLink = () => {
-      /*links.value.push({
+      links.value.push({
         rel: "",
         href: "",
         type: "",
         title: ""
-      });*/
-      links.value.push( new LinksType() );
+      });
     };
     const removeLink = (index) => {
       links.value = links.value.filter((link, i) => i !== index);

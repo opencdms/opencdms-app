@@ -99,7 +99,7 @@ const routes = [
          ]
       },
       {
-         path: '/station/:id',
+         path: '/station/:id(.*)',
          children: [
            {
              path: '',
@@ -321,6 +321,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/programme.vue'),
       },
       {
+        path: '/forms/record/create',
+        name: 'record-form',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/record.vue'),
+      },
+      {
         path: '/forms/host-alias/create',
         name: 'host-alias-form',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/host-alias.vue'),
@@ -404,6 +409,11 @@ const routes = [
         path: '/forms/reference-surface/create',
         name: 'reference-surface-form',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/reference-surface.vue'),
+      },
+      {
+        path: '/tests/geometry',
+        name: 'test-geom',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/map-picker-test.vue'),
       },
       {
         path: '/forms/deployment-media/create',

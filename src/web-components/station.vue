@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>Select station</v-card-title>
-    <v-card-item><v-autocomplete :items="hostOptions" item-title="name" item-value="id" label="host" return-object persistent-hint></v-autocomplete></v-card-item>
+    <v-card-item><v-autocomplete :items="hostOptions" v-model="selectedHost" item-title="name" item-value="id" label="host" return-object persistent-hint></v-autocomplete></v-card-item>
   </v-card>
   <v-card>
     <v-card-title>Station: {{ $route.params.id }}</v-card-title>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, watchEffect, computed } from 'vue';
+import { defineComponent, ref, watchEffect, computed, watch } from 'vue';
 import { VCard, VCardTitle, VCardText, VCardItem, VTabs, VTab, VBtn, VAutocomplete } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -42,6 +42,7 @@ export default defineComponent({
   },
   methods: {},
   setup(props) {
+    const selectedHost = ref(null)
     const router = useRouter();
 
     // set up repos
@@ -60,7 +61,10 @@ export default defineComponent({
       }
       single.value = await useRepo(Host).where('id', identifier).get()
       for (let i = 0; i < single.value.length; i++) {
-        single.value[i].links = JSON.parse(single.value[i].links);
+        //console.log(single.value[i].links)
+        if (typeof single.value[i].links === 'string'){
+          single.value[i].links = JSON.parse(single.value[i].links);
+        }
       }
     };
 
@@ -73,11 +77,12 @@ export default defineComponent({
     });
     onMounted( async() => {
       fetchRecord( route.params.id );
-
       watchEffect( () => {
         fetchRecord( route.params.id );
       });
-
+      watch( (selectedHost), (data) => {
+        router.push('/station/'+data.id);
+      } )
     });
 
     onBeforeUpdate( () => {
@@ -100,7 +105,7 @@ export default defineComponent({
       // This is a good place to perform any final cleanup or tear down of resources.
     });
     onErrorCaptured( () => {});
-    return {single, edit, hostOptions};
+    return {single, edit, hostOptions, selectedHost};
   }
 
 });

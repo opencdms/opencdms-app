@@ -9,7 +9,8 @@
       </template>
       <v-list-item router :to="{name: 'station-map'}" prepend-icon="mdi-map" title="Map view"/>
       <v-list-item router :to="{name: 'station-list'}" prepend-icon="mdi-table" title="Table view"/>
-      <v-list-item router :to="{name: 'station-viewer'}" prepend-icon="mdi-table" title="View/edit"/>
+      <v-list-item router :to="{name: 'station-viewer'}" prepend-icon="mdi-pencil" title="View/edit"/>
+      <v-list-item router :to="{name: 'host-form'}" prepend-icon="mdi-pencil" title="Create new"/>
     </v-list-group>
     <v-divider/>
 
@@ -60,7 +61,6 @@
         <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Forms"/>
       </template>
       <v-list-item router :to="{name: 'observation-form'}" prepend-icon="mdi-spirit-level" title="observation-form"/>
-      <v-list-item router :to="{name: 'host-form'}" prepend-icon="mdi-spirit-level" title="New host / station"/>
       <v-list-item router :to="{name: 'observer-form'}" prepend-icon="mdi-spirit-level" title="New observer / sensor"/>
       <v-list-item router :to="{name: 'deployment-form'}" prepend-icon="mdi-spirit-level" title="New deployment"/>
       <v-list-item router :to="{name: 'source-form'}" prepend-icon="mdi-spirit-level" title="New source"/>

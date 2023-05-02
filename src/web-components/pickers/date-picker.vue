@@ -10,7 +10,7 @@ import { defineComponent, ref, watch, context } from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import { VCard, VCardTitle, VCardText, VCardItem, VForm, VTextField, VSelect, VBtn } from 'vuetify/lib/components';
 import '@vuepic/vue-datepicker/dist/main.css';
-import {formatISO} from 'date-fns'
+import {formatISO, parseISO} from 'date-fns'
 export default defineComponent({
   name: 'date-picker',
   components: {
@@ -20,23 +20,34 @@ export default defineComponent({
     label: {
       type: String,
       default: 'Pick a date'
-    }
+    },
+    modelValue: {
+      type: String,
+      required: true
+    },
   },
   emits: ["update:modelValue"],
   setup(props, {emit} ) {
-    const selectedDate = ref('');
+    const selectedDate = ref(props.modelValue || '');
     const format = (date) => {
       return formatISO(date);
-    }
+    };
+    watch( () => props.modelValue,
+      (newValue) => {
+        selectedDate.value = parseISO(newValue);
+      },
+      {immediate: true}
+     );
 
     watch(selectedDate, (newValue) => {
-      console.log(newValue);
-      emit('update:modelValue', format(newValue));
-    })
+      if( format(newValue) !== props.modelValue){
+        emit('update:modelValue', format(newValue));
+      }
+    });
 
     return {
       selectedDate, format
-    }
+    };
   }
 });
 </script>

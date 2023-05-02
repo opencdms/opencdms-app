@@ -1,66 +1,87 @@
 <template>
   <v-card>
-    <v-card-title>{{route.params.id ? 'Edit host' : 'Create new host' }}</v-card-title>
-    <v-card-text></v-card-text>
+    <v-card-title>{{ route.params.id ? 'Edit' : 'Create new' }} station details</v-card-title>
     <v-card-text>
         <v-form>
             <v-card-item><v-text-field label="id" v-model="host.id"  hint="ID / primary key" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="name" v-model="host.name"  hint="Preferred name of host" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="description" v-model="host.description"  hint="Description of host" persistent-hint></v-text-field></v-card-item>
-            <v-card-item><LinkForm :links="links" @updateLinks="updateLinks" ></LinkForm></v-card-item>
-            <v-card-item><v-text-field label="location" v-model="host.location"  hint="Location of station" persistent-hint></v-text-field></v-card-item>
+            <v-card-item><LinkForm :links="host.links" @updateLinks="(value) => host.links = value" ></LinkForm></v-card-item>
+            <v-card-item><geometry-picker v-model="host.location" style="height: 100%"/></v-card-item>
             <v-card-item><v-text-field label="elevation" v-model="host.elevation" type="number" hint="Elevation of station above mean sea level in meters" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="wigos_station_identifier" v-model="host.wigos_station_identifier"  hint="WIGOS station identifier" persistent-hint></v-text-field></v-card-item>
-            <v-card-item><v-autocomplete :items="facilityTypeOptions" item-title="name" item-value="id" label="facility_type" v-model="host.facility_type" :hint="facilityTypeOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
-            <v-card-item><VueDatePicker label="date_established" v-model="host.date_established"  hint="Date host was first established" persistent-hint></VueDatePicker></v-card-item>
-            <v-card-item><VueDatePicker label="date_closed" v-model="host.date_closed"  hint="Date host was first established" persistent-hint></VueDatePicker></v-card-item>
-            <v-card-item><v-autocomplete :items="wmoRegionOptions" item-title="name" item-value="id" label="wmo_region" v-model="host.wmo_region" :hint="wmoRegionOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
-            <v-card-item><v-autocomplete :items="territoryOptions" item-title="name" item-value="id" label="territory" v-model="host.territory" :hint="territoryOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
-            <v-card-item><v-autocomplete :items="timeZoneOptions" item-title="name" item-value="id" label="time_zone" v-model="host.time_zone" :hint="timeZoneOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
-            <v-card-item><VueDatePicker label="valid_from" v-model="host.valid_from"  hint="Date from which the details for this record are valid" persistent-hint></VueDatePicker></v-card-item>
-            <v-card-item><VueDatePicker label="valid_to" v-model="host.valid_to"  hint="Date after which the details for this record are no longer valid" persistent-hint></VueDatePicker></v-card-item>
-            <v-card-item><v-text-field label="_version" v-model="host._version" type="number" hint="Version number of this record (auto udpates)" persistent-hint disabled></v-text-field></v-card-item>
-            <v-card-item><v-text-field label="_change_date" v-model="host._change_date"  hint="Date this record was changed (auto updates)" persistent-hint disabled></v-text-field></v-card-item>
-            <v-card-item><v-autocomplete :items="userOptions" item-title="name" item-value="id" label="user" v-model="host._user" :hint="userOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
-            <v-card-item><v-autocomplete :items="statusOptions" item-title="name" item-value="id" label="status" v-model="host._status" :hint="statusOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
+            <v-card-item><v-select :items="facilityTypeOptions" item-title="name" item-value="id" label="facility_type" v-model="host.facility_type" :hint="facilityTypeOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item>
+              <v-container>
+                <v-row>
+                  <v-col :cols="3"><VueDatePicker label="date_established" v-model="host.date_established"  hint="Date host was first established" persistent-hint></VueDatePicker></v-col>
+                  <v-col :cols="3"><VueDatePicker label="date_closed" v-model="host.date_closed"  hint="Date host was first established" persistent-hint></VueDatePicker></v-col>
+                </v-row>
+              </v-container>
+            </v-card-item>
+            <v-card-item><v-select :items="wmoRegionOptions" item-title="name" item-value="id" label="wmo_region" v-model="host.wmo_region" :hint="wmoRegionOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-select :items="territoryOptions" item-title="name" item-value="id" label="territory" v-model="host.territory" :hint="territoryOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-select :items="timeZoneOptions" item-title="name" item-value="id" label="time_zone" v-model="host.time_zone" :hint="timeZoneOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item>
+              <v-container>
+                <v-row>
+                  <v-col :cols="3"><VueDatePicker label="valid_from" v-model="host.valid_from"  hint="Date from which the details for this record are valid" persistent-hint></VueDatePicker></v-col>
+                  <v-col :cols="3"><VueDatePicker label="valid_to" v-model="host.valid_to"  hint="Date after which the details for this record are no longer valid" persistent-hint></VueDatePicker></v-col>
+                </v-row>
+              </v-container>
+            </v-card-item>
+            <v-card-item><v-text-field label="_version" v-model="host._version" type="number" hint="Version number of this record (autoupdated)" persistent-hint readonly></v-text-field></v-card-item>
+            <v-card-item><v-text-field label="_change_date" v-model="host._change_date"  hint="Date this record was changed (autoupdated)" persistent-hint readonly></v-text-field></v-card-item>
+            <v-card-item><v-select :items="userOptions" item-title="name" item-value="id" label="user" v-model="host._user" :hint="userOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-select :items="statusOptions" item-title="name" item-value="id" label="status" v-model="host._status" :hint="statusOptionsHint" return-object persistent-hint></v-select></v-card-item>
             <v-card-item><v-text-field label="comments" v-model="host.comments"  hint="Free text comments on this record, for example description of changes made etc" persistent-hint></v-text-field></v-card-item>
         </v-form>
-        <v-btn @click="createHost">{{route.params.id ? 'Update' : 'Save' }}</v-btn>
+        <v-btn @click="createHost">{{ route.params.id ? 'Save' : 'Create' }}</v-btn>
+        <v-btn @click="cancelEdit">Cancel</v-btn>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
 import * as d3 from 'd3';
-import { defineComponent, ref, computed } from 'vue';
-import { VCard, VCardTitle, VCardText, VCardItem, VForm, VTextField, VSelect, VBtn, VAutocomplete } from 'vuetify/lib/components';
+import { defineComponent, ref, computed, watch } from 'vue';
+import { VCard, VCardTitle, VCardText, VCardItem, VForm, VTextField, VSelect, VBtn } from 'vuetify/lib/components';
+import { VContainer, VRow, VCol } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
-import {useRouter, useRoute} from 'vue-router';
 import {useStore} from 'pinia';
 import {useRepo} from 'pinia-orm';
-import {formatISO} from 'date-fns';
 
-// pickers / form components
 import LinkForm from '@/web-components/forms/links';
 import VueDatePicker from '@/web-components/pickers/date-picker.vue';
+import GeometryPicker from '@/web-components/pickers/geometry.vue';
 
-// models for the CDM
+import {useRoute, useRouter} from 'vue-router';
+
+
 import FacilityType from '@/models/FacilityType';
 import WmoRegion from '@/models/WmoRegion';
 import Territory from '@/models/Territory';
 import TimeZone from '@/models/TimeZone';
 import User from '@/models/User';
 import Status from '@/models/Status';
+
+// import model
 import Host from '@/models/Host';
-
-// utilities
-import {loadData} from '@/utils/load-data.js';
-
-import database from '@/database/';
 
 export default defineComponent({
   name: 'HostForm',
   props: {
+  },
+  methods:{
+    parseLinks (links) {
+      let res;
+      if( links && links.length > 0 ){
+        res = JSON.stringify(links);
+      }else{
+        res = '';
+      }
+      return res;
+    }
   },
   components: {
     VCard,
@@ -72,41 +93,27 @@ export default defineComponent({
     VForm,
     VBtn,
     VueDatePicker,
+    GeometryPicker,
     LinkForm,
-    VAutocomplete
+    VContainer, VCol, VRow
   },
-  setup(props, context) {
-    // routers
-    console.log("Setting up routers for host ...")
-    const router = useRouter();
+  setup() {
+
     const route = useRoute();
+    const router = useRouter();
+
     // set up links object
-    console.log("Setting up links for host ...")
     const links = ref([]);
     const updateLinks = (updatedLinks) => {
+      console.log("updating links");
       host.value.links = updatedLinks;
     }
-    // set up repos
-    console.log("Setting up repositories for host ...")
-    const facilityTypeRepo = useRepo(FacilityType);
-    const wmoRegionRepo = useRepo(WmoRegion);
-    const territoryRepo = useRepo(Territory);
-    const timeZoneRepo = useRepo(TimeZone);
-    const userRepo = useRepo(User);
-    const statusRepo = useRepo(Status);
-    const hostRepo = useRepo(Host);
-    // object we are editing
-    console.log("Creating host object ...")
-    const host = ref(hostRepo.make());
 
-    // other objects
-    console.log("Setting options for select inputs ...")
-    // set options for the different drop down menu items (todo: check is we can move these to a function
-    console.log("   facilityType")
+    // set up repos
+    const facilityTypeRepo = useRepo(FacilityType);
     const facilityTypeOptions = computed(() => { return facilityTypeRepo.all() });
     const facilityTypeOptionsHint = computed(() => {
-      if( host.value.facility_type && host.value.facility_type !== null ){
-        console.log(host.value.facility_type);
+      if( host.value.facility_type ){
         if ( 'description' in host.value.facility_type ){
           return host.value.facility_type.description;
         }else{
@@ -116,10 +123,10 @@ export default defineComponent({
         return "Select facility_type";
       }
     } );
-    console.log("   wmoRegion")
+    const wmoRegionRepo = useRepo(WmoRegion);
     const wmoRegionOptions = computed(() => { return wmoRegionRepo.all() });
     const wmoRegionOptionsHint = computed(() => {
-      if( host.value.wmo_region && host.value.wmo_region !== null ){
+      if( host.value.wmo_region ){
         if ( 'description' in host.value.wmo_region ){
           return host.value.wmo_region.description;
         }else{
@@ -129,10 +136,10 @@ export default defineComponent({
         return "Select wmo_region";
       }
     } );
-    console.log("   territory")
+    const territoryRepo = useRepo(Territory);
     const territoryOptions = computed(() => { return territoryRepo.all() });
     const territoryOptionsHint = computed(() => {
-      if( host.value.territory && host.value.territory !== null ){
+      if( host.value.territory ){
         if ( 'description' in host.value.territory ){
           return host.value.territory.description;
         }else{
@@ -142,10 +149,10 @@ export default defineComponent({
         return "Select territory";
       }
     } );
-    console.log("   timezone")
+    const timeZoneRepo = useRepo(TimeZone);
     const timeZoneOptions = computed(() => { return timeZoneRepo.all() });
     const timeZoneOptionsHint = computed(() => {
-      if( host.value.time_zone && host.value.time_zone !== null ){
+      if( host.value.time_zone ){
         if ( 'description' in host.value.time_zone ){
           return host.value.time_zone.description;
         }else{
@@ -155,10 +162,10 @@ export default defineComponent({
         return "Select time_zone";
       }
     } );
-    console.log("   user")
+    const userRepo = useRepo(User);
     const userOptions = computed(() => { return userRepo.all() });
     const userOptionsHint = computed(() => {
-      if( host.value._user && host.value._user !== null ){
+      if( host.value._user ){
         if ( 'description' in host.value._user ){
           return host.value._user.description;
         }else{
@@ -168,10 +175,10 @@ export default defineComponent({
         return "Select user";
       }
     } );
-    console.log("   status")
+    const statusRepo = useRepo(Status);
     const statusOptions = computed(() => { return statusRepo.all() });
     const statusOptionsHint = computed(() => {
-      if( host.value._status && host.value._status !== null ){
+      if( host.value._status ){
         if ( 'description' in host.value._status ){
           return host.value._status.description;
         }else{
@@ -182,65 +189,75 @@ export default defineComponent({
       }
     } );
 
-    console.log("Declaring lifecycle hooks")
+    const hostRepo = useRepo(Host);
+    const host = ref(null);
 
-    onMounted( async () => {
-      if( route.params.id ){
-        console.log("loading host "+route.params.id);
-        // this needs to be moved to a function
-        console.log( useRepo(Host).where('id',route.params.id).get() )
-        //let single = await useRepo(Host).where('id',route.params.id).first();
-        let single = await useRepo(Host).where( (host) => {
-          return host.id == route.params.id && (host._status_id == 1 || host._status_id == 2);
-        }).orderBy('_version','desc').first();
-        single._status_id = 3;
-        useRepo(Host).save(single);
-        console.log(single);
-        // update status to archived and save back to repo
-        // get linked objects
-        single.facility_type = await useRepo(FacilityType).where('id',single.facility_type_id).first();
-        single.wmo_region = await useRepo(WmoRegion).where('id',single.wmo_region_id).first();
-        single.territory = await useRepo(Territory).where('id',single.territory_id).first();
-        single.time_zone = await useRepo(TimeZone).where('id',single.time_zone_id).first();
-        // set status_id to draft and increment version number
-        single._change_date = formatISO(new Date());
-        single._status = await useRepo(Status).where('name','draft').first();
-        console.log(single._version);
-        single._version = single._version + 1;
-        console.log(single._version);
-        single._user = await useRepo(User).where('id',1).first();;
-        host.value = single;
-        console.log(host.value);
-      }
-    });
+    console.log(route.params);
+    if( route.params.id ){
+      // get host with eager loading
+      host.value = useRepo(Host).
+          with('territory').
+          with('wmo_region').
+          with('facility_type').
+          with('time_zone').
+          with('_user').
+          with('_status').
+          where('id',route.params.id).first();
+      console.log( host.value );
+    }else{
+      host.value = useRepo(Host).make()
+    }
 
-    console.log("Declaring functions")
+    // const host = ref(hostRepo.make());
+
     // function to create new object and to add to store
     const createHost = async () => {
+        console.log("saving");
+        console.log(host.value)
         let valueToSave = {};
         Object.assign(valueToSave,host.value);
         await hostRepo.save(valueToSave);
-        // add preview page with confirmation to save?
-        router.push('/station/'+host.value.id);
+        // navigate to view new record
+        router.push('/station/'+ host.value.id);
     };
+    const cancelEdit = async () => {
+        router.push('/station/'+route.params.id);
+    };
+
+    watch( (host.value), (data)  => {
+      console.log(data)
+    })
 
     const resetHost = () => {
         Object.assign(host.value, hostRepo.make() );
     };
 
-    console.log("Finished setting up host")
+    onMounted( () => {
+      // This hook is called after the component is mounted to the DOM.
+      // This is a good place to perform any necessary DOM manipulations, initialize
+      // third-party libraries, or set up event listeners.
+      if( route.params.id ){
+        host.value._version = host.value._version + 1;
+      }else{
+        host.value._version = 1;
+        host.value._user_id = "tag:beta.opencdms.org,2023:/data/user/default";
+        host.value._status_id = "tag:beta.opencdms.org,2023:/vocab/status/draft";
+      }
+    });
+
     return {
         host,
-        createHost,
+        createHost, cancelEdit,
         resetHost,
         links,
-        updateLinks, route,
+        updateLinks,
         facilityTypeOptions, facilityTypeOptionsHint,
         wmoRegionOptions, wmoRegionOptionsHint,
         territoryOptions, territoryOptionsHint,
         timeZoneOptions, timeZoneOptionsHint,
         userOptions, userOptionsHint,
-        statusOptions, statusOptionsHint
+        statusOptions, statusOptionsHint,
+        route
     }
   }
 });

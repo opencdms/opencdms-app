@@ -4,6 +4,7 @@
     <v-card-text>
         <v-form>
             <v-card-item><v-text-field label="id" v-model="climateZone.id"  hint="" persistent-hint></v-text-field></v-card-item>
+            <v-card-item><v-text-field label="authority" v-model="climateZone.authority"  hint="Naming authority for code list entry" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="name" v-model="climateZone.name"  hint="" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="description" v-model="climateZone.description"  hint="" persistent-hint></v-text-field></v-card-item>
             <v-card-item><LinkForm :links="links" @updateLinks="updateLinks" ></LinkForm></v-card-item>
@@ -35,9 +36,6 @@ import Status from '@/models/Status';
 
 // import model
 import ClimateZone from '@/models/ClimateZone';
-
-import {loadData} from '@/utils/load-data.js';
-
 
 export default defineComponent({
   name: 'ClimateZoneForm',
@@ -117,15 +115,6 @@ export default defineComponent({
     const resetClimateZone = () => {
         Object.assign(climateZone.value, climateZoneRepo.make() );
     };
-
-
-    onBeforeMount( async() => {
-      // load reference data so this is available to the form
-      if( userRepo.all().length === 0){loadData('/data/user.psv').then( (result) => { userRepo.save(result) })};
-
-      if( statusRepo.all().length === 0){loadData('/data/status.psv').then( (result) => { statusRepo.save(result) })};
-
-    });
 
     return {
         climateZone,
