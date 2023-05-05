@@ -4,12 +4,22 @@
     <v-card-text>{{ content }}</v-card-text>
     <v-card-text>{{ description }}</v-card-text>
   </v-card>
+  <v-card v-if='obsLoaded'>
+    <v-card-title>Example line plot</v-card-title>
+    <v-card-item><Line :data="chartData"/></v-card-item>
+  </v-card>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
-import { VCard, VCardTitle, VCardText } from 'vuetify/lib/components';
+import { defineComponent, ref, computed } from 'vue';
+import { VCard, VCardTitle, VCardText, VCardItem } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
+import {loadData} from '@/utils/load-data.js';
+
+import {Line} from 'vue-chartjs';
+import { Chart, CategoryScale, LinearScale, LineController, LineElement, PointElement} from 'chart.js';
+Chart.register(CategoryScale, LinearScale, LineController, LineElement, PointElement);
+
 export default defineComponent({
   name: 'observation-form',
   props: {
@@ -30,39 +40,46 @@ export default defineComponent({
     VCard,
     VCardTitle,
     VCardText,
+    VCardItem,
+    Line
   },
   methods: {},
   setup() {
-    // lifecycle hooks
-    onBeforeMount( () => {
-      // This hook is called before the component is mounted to the DOM.
-      // This is a good place to do any necessary setup before the component is visible.
+    const obs = ref(null);
+    const obsLoaded = ref(false);
+    const chartOptions = ref({
+      scales: {
+        x: {
+          type: "time"
+        }
+      }
     });
-    onMounted( () => {
-      // This hook is called after the component is mounted to the DOM.
-      // This is a good place to perform any necessary DOM manipulations, initialize
-      // third-party libraries, or set up event listeners.
+
+    onMounted(async () => {
+      obs.value = await loadData('/data/example_obs.csv');
+      obsLoaded.value = true;
     });
-    onBeforeUpdate( () => {
-      // This hook is called when a component's data changes, but before the DOM is re-rendered.
-      // This is a good place to make any necessary calculations or changes before the component
-      // is updated.
+
+    const chartData = computed(() => {
+      if (obs.value) {
+        console.log(obs.value);
+        let retval = {
+          // labels: obs.value.map(d => new Date(d.date)),
+          labels: obs.value.map(d => d.date),
+          datasets: [
+            {
+              label: 'Air temperature',
+              data: obs.value.map(d => d.air_temperature)
+            }
+          ]
+        };
+        console.log(retval);
+        return retval;
+      } else {
+        return {};
+      }
     });
-    onUpdated( () => {
-      // This hook is called after the component is updated and the DOM is re-rendered.
-      // This is a good place to perform any necessary DOM manipulations or update third-party
-      // libraries.
-    });
-    onBeforeUnmount( () => {
-      // This hook is called before the component is unmounted from the DOM.
-      // This is a good place to clean up any resources or event listeners that were set up in
-      // onMounted.
-    });
-    onUnmounted( () => {
-      // This hook is called after the component is unmounted from the DOM.
-      // This is a good place to perform any final cleanup or tear down of resources.
-    });
-    onErrorCaptured( () => {});
+    return {obs, chartData, obsLoaded};
   }
 
 });

@@ -7,7 +7,7 @@
 <script>
 import StationMap from './../web-components/station-map.vue';
 import { VCard, VCardTitle, VCardText } from 'vuetify/lib/components';
-import BaseMap from './../web-components/base-map.vue'
+import BaseMap from './../web-components/maps/base-map.vue'
 
 export default {
   components: {

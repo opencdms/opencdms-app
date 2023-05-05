@@ -1,6 +1,6 @@
 <template>
   <div>
-    <feature title="feature" content="This page is under construction" description="editable view of single feature" />
+    <feature/>
   </div>
 </template>
 

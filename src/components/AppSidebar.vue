@@ -7,9 +7,10 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-map-marker" title="Stations"></v-list-item>
       </template>
-      <v-list-item router :to="{name: 'station-map'}" prepend-icon="mdi-map" title="station-map"/>
-      <v-list-item router :to="{name: 'station-list'}" prepend-icon="mdi-table" title="station-list"/>
-      <!--<v-list-item router :to="{name: 'station'}" prepend-icon="mdi-form-select" title="station"/>-->
+      <v-list-item router :to="{name: 'station-map'}" prepend-icon="mdi-map" title="Map view"/>
+      <v-list-item router :to="{name: 'station-list'}" prepend-icon="mdi-table" title="Table view"/>
+      <v-list-item router :to="{name: 'station-viewer'}" prepend-icon="mdi-pencil" title="View/edit"/>
+      <v-list-item router :to="{name: 'host-form'}" prepend-icon="mdi-pencil" title="Create new"/>
     </v-list-group>
     <v-divider/>
 
@@ -36,9 +37,9 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-map-marker-circle" title="Features"/>
       </template>
-      <v-list-item router :to="{name: 'feature-map'}" prepend-icon="mdi-map" title="feature-map"/>
-      <v-list-item router :to="{name: 'feature-list'}" prepend-icon="mdi-table" title="feature-list"/>
-      <v-list-item router :to="{name: 'feature'}" prepend-icon="mdi-form-select" title="feature"/>
+      <v-list-item router :to="{name: 'feature-map'}" prepend-icon="mdi-map" title="Map"/>
+      <v-list-item router :to="{name: 'feature-list'}" prepend-icon="mdi-table" title="Table"/>
+      <v-list-item router :to="{name: 'feature'}" prepend-icon="mdi-form-select" title="View/edit"/>
     </v-list-group>
     <v-divider/>
 
@@ -60,6 +61,10 @@
         <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="Forms"/>
       </template>
       <v-list-item router :to="{name: 'observation-form'}" prepend-icon="mdi-spirit-level" title="observation-form"/>
+      <v-list-item router :to="{name: 'observer-form'}" prepend-icon="mdi-spirit-level" title="New observer / sensor"/>
+      <v-list-item router :to="{name: 'deployment-form'}" prepend-icon="mdi-spirit-level" title="New deployment"/>
+      <v-list-item router :to="{name: 'source-form'}" prepend-icon="mdi-spirit-level" title="New source"/>
+      <v-list-item router :to="{name: 'collection-form'}" prepend-icon="mdi-spirit-level" title="New collection"/>
     </v-list-group>
     <v-divider/>
 
@@ -106,7 +111,7 @@
 <script>
   import { VNavigationDrawer, VIcon, VListGroup, VList, VListItem, VListItemTitle, VImg, VDivider } from 'vuetify/lib/components'
   import { computed } from 'vue'
-  import { useStore } from 'vuex'
+  // import { useStore } from 'vuex'
   import OpenCDMSLogo from './../web-components/opencdmsLogo'
   export default {
     name: 'AppSidebar',
@@ -126,7 +131,7 @@
       OpenCDMSLogo
     },
     setup() {
-      const store = useStore()
+      //const store = useStore()
       return {  }
     },
   };
