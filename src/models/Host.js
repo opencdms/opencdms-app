@@ -7,6 +7,8 @@ import TimeZone from '@/models/TimeZone';
 import User from '@/models/User';
 import Status from '@/models/Status';
 
+import {to_geojson} from '@/utils/geojson.js';
+
 export default class Host extends Model {
   static entity = 'host';
   static fields() {
@@ -39,13 +41,59 @@ export default class Host extends Model {
       comments: this.string('')
     };
   };
-  static saving (model) {};
-  static saved (model) { };
-  static creating(model) {};
-  static created(model) {};
+  static saving (model) {
+    console.log("saving host")
+    console.log(model.id)
+  };
+  static saved (model) {
+    // check whether we need to save to the database
+    if( model._version === 1 && model._status_id === "tag:beta.opencdms.org,2023:/vocab/status/draft"){ // todo
+      var to_save = to_geojson([model]);
+      to_save.map( (obj) => {
+        var payload = JSON.stringify(obj);
+        var url_ = "http://localhost:5000/collections/stations/items"
+        // PUT for update
+        fetch(url_, {method:'OPTIONS'}).then( (response) => {console.log(response)});
+        fetch(url_, {
+          method: 'POST',
+          body: payload,
+          headers: {
+            'encode': 'json',
+            "Origin": "http://localhost:81",
+            'Content-Type': 'application/geo+json'
+          }
+        })
+      });
+    };
+  };
+  static creating(model) {
+    console.log("creating host")
+    console.log(model.id)
+  };
+  static created(model) {
+  };
   static deleting(model) {};
   static deleted (model) {};
   static updating (model) {};
-  static updated (model) {};
+  static updated (model) {
+    // now we want to save to the backend
+    var to_save = to_geojson([model]);
+    console.log( to_save );
+    to_save.map( (obj) => {
+      var payload = JSON.stringify(obj);
+      var url_ = "http://localhost:5000/collections/stations/items/" + obj.id
+      // PUT for update
+      fetch(url_, {method:'OPTIONS'}).then( (response) => {console.log(response)});
+      fetch(url_, {
+        method: 'PUT',
+        body: payload,
+        headers: {
+          'encode': 'json',
+          "Origin": "http://localhost:81",
+          'Content-Type': 'application/geo+json'
+        }
+      })
+    });
+  };
 };
 

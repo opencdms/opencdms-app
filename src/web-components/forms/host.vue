@@ -10,30 +10,30 @@
             <v-card-item><geometry-picker v-model="host.location" style="height: 100%"/></v-card-item>
             <v-card-item><v-text-field label="elevation" v-model="host.elevation" type="number" hint="Elevation of station above mean sea level in meters" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="wigos_station_identifier" v-model="host.wigos_station_identifier"  hint="WIGOS station identifier" persistent-hint></v-text-field></v-card-item>
-            <v-card-item><v-select :items="facilityTypeOptions" item-title="name" item-value="id" label="facility_type" v-model="host.facility_type" :hint="facilityTypeOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-autocomplete :items="facilityTypeOptions" item-title="name" item-value="id" label="facility_type" v-model="host.facility_type" :hint="facilityTypeOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
             <v-card-item>
               <v-container>
                 <v-row>
-                  <v-col :cols="3"><VueDatePicker label="date_established" v-model="host.date_established"  hint="Date host was first established" persistent-hint></VueDatePicker></v-col>
-                  <v-col :cols="3"><VueDatePicker label="date_closed" v-model="host.date_closed"  hint="Date host was first established" persistent-hint></VueDatePicker></v-col>
+                  <v-col :cols="4"><VueDatePicker label="date_established" v-model="host.date_established"  hint="Date host was first established" persistent-hint></VueDatePicker></v-col>
+                  <v-col :cols="4"><VueDatePicker label="date_closed" v-model="host.date_closed"  hint="Date host was first established" persistent-hint></VueDatePicker></v-col>
                 </v-row>
               </v-container>
             </v-card-item>
-            <v-card-item><v-select :items="wmoRegionOptions" item-title="name" item-value="id" label="wmo_region" v-model="host.wmo_region" :hint="wmoRegionOptionsHint" return-object persistent-hint></v-select></v-card-item>
-            <v-card-item><v-select :items="territoryOptions" item-title="name" item-value="id" label="territory" v-model="host.territory" :hint="territoryOptionsHint" return-object persistent-hint></v-select></v-card-item>
-            <v-card-item><v-select :items="timeZoneOptions" item-title="name" item-value="id" label="time_zone" v-model="host.time_zone" :hint="timeZoneOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-autocomplete :items="wmoRegionOptions" item-title="name" item-value="id" label="wmo_region" v-model="host.wmo_region" :hint="wmoRegionOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
+            <v-card-item><v-autocomplete :items="territoryOptions" item-title="name" item-value="id" label="territory" v-model="host.territory" :hint="territoryOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
+            <v-card-item><v-autocomplete :items="timeZoneOptions" item-title="name" item-value="id" label="time_zone" v-model="host.time_zone" :hint="timeZoneOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
             <v-card-item>
               <v-container>
                 <v-row>
-                  <v-col :cols="3"><VueDatePicker label="valid_from" v-model="host.valid_from"  hint="Date from which the details for this record are valid" persistent-hint></VueDatePicker></v-col>
-                  <v-col :cols="3"><VueDatePicker label="valid_to" v-model="host.valid_to"  hint="Date after which the details for this record are no longer valid" persistent-hint></VueDatePicker></v-col>
+                  <v-col :cols="4"><VueDatePicker label="valid_from" v-model="host.valid_from"  hint="Date from which the details for this record are valid" persistent-hint></VueDatePicker></v-col>
+                  <v-col :cols="4"><VueDatePicker label="valid_to" v-model="host.valid_to"  hint="Date after which the details for this record are no longer valid" persistent-hint></VueDatePicker></v-col>
                 </v-row>
               </v-container>
             </v-card-item>
             <v-card-item><v-text-field label="_version" v-model="host._version" type="number" hint="Version number of this record (autoupdated)" persistent-hint readonly></v-text-field></v-card-item>
             <v-card-item><v-text-field label="_change_date" v-model="host._change_date"  hint="Date this record was changed (autoupdated)" persistent-hint readonly></v-text-field></v-card-item>
-            <v-card-item><v-select :items="userOptions" item-title="name" item-value="id" label="user" v-model="host._user" :hint="userOptionsHint" return-object persistent-hint></v-select></v-card-item>
-            <v-card-item><v-select :items="statusOptions" item-title="name" item-value="id" label="status" v-model="host._status" :hint="statusOptionsHint" return-object persistent-hint></v-select></v-card-item>
+            <v-card-item><v-autocomplete :items="userOptions" item-title="name" item-value="id" label="user" v-model="host._user" :hint="userOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
+            <v-card-item><v-autocomplete :items="statusOptions" item-title="name" item-value="id" label="status" v-model="host._status" :hint="statusOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>
             <v-card-item><v-text-field label="comments" v-model="host.comments"  hint="Free text comments on this record, for example description of changes made etc" persistent-hint></v-text-field></v-card-item>
         </v-form>
         <v-btn @click="createHost">{{ route.params.id ? 'Save' : 'Create' }}</v-btn>
@@ -45,7 +45,7 @@
 <script>
 import * as d3 from 'd3';
 import { defineComponent, ref, computed, watch } from 'vue';
-import { VCard, VCardTitle, VCardText, VCardItem, VForm, VTextField, VSelect, VBtn } from 'vuetify/lib/components';
+import { VCard, VCardTitle, VCardText, VCardItem, VForm, VTextField, VSelect, VBtn, VAutocomplete } from 'vuetify/lib/components';
 import { VContainer, VRow, VCol } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
 import {useStore} from 'pinia';
@@ -89,7 +89,7 @@ export default defineComponent({
     VCardText,
     VCardItem,
     VTextField,
-    VSelect,
+    VSelect, VAutocomplete,
     VForm,
     VBtn,
     VueDatePicker,
@@ -240,8 +240,8 @@ export default defineComponent({
         host.value._version = host.value._version + 1;
       }else{
         host.value._version = 1;
-        host.value._user_id = "tag:beta.opencdms.org,2023:/data/user/default";
-        host.value._status_id = "tag:beta.opencdms.org,2023:/vocab/status/draft";
+        host.value._user = useRepo(User).where('id','tag:beta.opencdms.org,2023:/data/user/default').first();
+        host.value._status = useRepo(Status).where('id','tag:beta.opencdms.org,2023:/vocab/status/draft').first();
       }
     });
 

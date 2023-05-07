@@ -34,6 +34,9 @@ import User from '@/models/User';
 import Host from '@/models/Host';
 import Feature from '@/models/Feature';
 
+import * as Wkt from 'wicket';
+
+import {flatten_geojson} from '@/utils/geojson.js';
 
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
@@ -66,10 +69,9 @@ router.beforeEach( async () => {
   if( useRepo(Territory).all().length === 0){await loadData('http://localhost:5000/vocabularies/territory/items?f=csv', true).then( (result) => { useRepo(Territory).save(result) })};
   if( useRepo(TimeZone).all().length === 0){await loadData('http://localhost:5000/vocabularies/time_zone/items?f=csv', true).then( (result) => { useRepo(TimeZone).save(result) })};
   if( useRepo(Topography).all().length === 0){await loadData('http://localhost:5000/vocabularies/topography/items?f=csv', true).then( (result) => { useRepo(Topography).save(result) })};
-  //if( useRepo(WmoRegion).all().length === 0){await loadData('http://localhost:5000/vocabularies/wmo_region/items?f=csv', true).then( (result) => { useRepo(WmoRegion).save(result) })};
   if( useRepo(WmoRegion).all().length === 0){await loadData('http://localhost:5000/vocabularies/wmo_region/items?f=csv', true).then( (result) => { useRepo(WmoRegion).save(result) })};
   if( useRepo(User).all().length === 0){await loadData('http://localhost:5000/vocabularies/user/items?f=csv', true).then( (result) => { useRepo(User).save(result) })};
-  if( useRepo(Host).all().length === 0){await loadData('/data/hosts.psv').then( (result) => { useRepo(Host).save(result) })};
+  if( useRepo(Host).all().length === 0){await loadData('http://localhost:5000/collections/stations/items?f=json', true).then( (result) => flatten_geojson(result.features) ).then( (result) => { useRepo(Host).save(result) })};
   if( useRepo(Feature).all().length === 0){await loadData('/data/features.psv').then( (result) => { useRepo(Feature).save(result) })};
 });
 
