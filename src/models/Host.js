@@ -1,4 +1,5 @@
-import { Model } from 'pinia-orm'
+import { Model, useRepo } from 'pinia-orm'
+import ApplicationState from '@/models/ApplicationState';
 import LinksType from '@/models/LinksType';
 import FacilityType from '@/models/FacilityType';
 import WmoRegion from '@/models/WmoRegion';
@@ -42,16 +43,16 @@ export default class Host extends Model {
     };
   };
   static saving (model) {
-    console.log("saving host")
-    console.log(model.id)
   };
   static saved (model) {
-    // check whether we need to save to the database
-    if( model._version === 1 && model._status_id === "tag:beta.opencdms.org,2023:/vocab/status/draft"){ // todo
+  };
+  static creating(model) {
+    if( useRepo(ApplicationState).where('key','databaseReady').first() ){
       var to_save = to_geojson([model]);
+      // update status
       to_save.map( (obj) => {
         var payload = JSON.stringify(obj);
-        var url_ = "http://localhost:5000/collections/stations/items"
+        var url_ = process.env.API + "/collections/stations/items"
         // PUT for update
         fetch(url_, {method:'OPTIONS'}).then( (response) => {console.log(response)});
         fetch(url_, {
@@ -66,10 +67,6 @@ export default class Host extends Model {
       });
     };
   };
-  static creating(model) {
-    console.log("creating host")
-    console.log(model.id)
-  };
   static created(model) {
   };
   static deleting(model) {};
@@ -81,7 +78,7 @@ export default class Host extends Model {
     console.log( to_save );
     to_save.map( (obj) => {
       var payload = JSON.stringify(obj);
-      var url_ = "http://localhost:5000/collections/stations/items/" + obj.id
+      var url_ = process.env.API + "/collections/stations/items/" + obj.id
       // PUT for update
       fetch(url_, {method:'OPTIONS'}).then( (response) => {console.log(response)});
       fetch(url_, {

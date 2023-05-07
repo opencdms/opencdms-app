@@ -1,3 +1,4 @@
+const Dotenv = require('dotenv-webpack');
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
@@ -24,4 +25,9 @@ module.exports = defineConfig({
       background_color: '#3c4b64',
     },
   },
+  configureWebpack: {
+    plugins: [
+      new Dotenv()
+    ]
+  }
 })

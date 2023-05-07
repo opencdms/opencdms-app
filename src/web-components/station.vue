@@ -4,9 +4,12 @@
     <v-col :cols="12">
       <v-card>
         <v-card-title>Select station</v-card-title>
-        <v-card-item><v-autocomplete :items="hostOptions" v-model="selectedHost" item-title="name" item-value="id" label="host" return-object persistent-hint></v-autocomplete></v-card-item>
+        <v-card-text><select-host v-model="selectedHost"/></v-card-text>
+        <!-- <v-card-item><v-autocomplete :items="hostOptions" v-model="selectedHost" item-title="name" item-value="id" label="host" return-object persistent-hint></v-autocomplete></v-card-item> -->
       </v-card>
     </v-col>
+    </v-row>
+    <v-row>
     </v-row>
     <v-row>
       <v-col :cols="6">
@@ -38,6 +41,9 @@ import {useRepo} from 'pinia-orm';
 
 import FeatureMap from '@/web-components/maps/feature-map.vue'
 
+import SelectHost from '@/web-components/pickers/select-host.vue';
+
+
 // opencdms imports
 import Host from '@/models/Host';
 
@@ -52,7 +58,8 @@ export default defineComponent({
     VTab,
     VBtn,
     VAutocomplete, VContainer, VCol, VRow,
-    FeatureMap
+    FeatureMap,
+    SelectHost
   },
   methods: {},
   setup(props) {
