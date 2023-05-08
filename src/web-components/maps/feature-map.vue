@@ -1,7 +1,8 @@
 <template>
-  <v-card style="height: 600px;">
-    <v-card-title>{{title}}</v-card-title>
-    <base-map @mapLoaded="onMapLoaded" style="height: 100%;" zoom="4"/>
+  <v-card style="height: 500pt;">
+    <v-card-text style="height: 100%;">
+      <base-map @mapLoaded="onMapLoaded" style="height: 100%;" zoom="4"/>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -14,7 +15,7 @@ import * as gjv from 'geojson-validation';
 import L from 'leaflet';
 
 // vue imports
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, watch } from 'vue';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
 
 // vuetify imports
@@ -32,36 +33,37 @@ export default defineComponent({
     }
   },
   components: {
-    VCard, VCardTitle, VCardItem,
+    VCard, VCardTitle, VCardItem, VCardText,
     BaseMap
   },
   setup( props, context ){
     const map = ref(null);
-    const onMapLoaded = async (map) => {
+    const markerLayer = ref(null);
+    const onMapLoaded = async (mapInstance) => {
+      map.value = mapInstance;
       if ( props.geom ){
         // make sure the geometry is valid
         if( gjv.isFeature(props.geom) ){
-          console.log("Have geom");
           // now add to map
-          L.geoJSON(geom).addTo(props.geom);
-        }else{
-          var example = {
-            "type": "Feature",
-            "geometry": {"type": "Point", "coordinates": [102.0, 0.5]},
-            "properties": {"prop0": "value0"}
-          }
-          console.log(example)
-          L.geoJSON(example).addTo(map);
+          markerLayer.value = L.geoJSON(props.geom).addTo(map.value);
+          map.value.fitBounds(markerLayer.value.getBounds());
+          map.value.setZoom(6);
           console.log("invalid geom");
         }
       }else{
         console.log("No geometry");
       }
     };
+    watch( () => props.geom, (newValue) => {
+      if( markerLayer.value ){
+        markerLayer.value.remove();
+      }
+      markerLayer.value = L.geoJSON(newValue).addTo(map.value);
+      map.value.fitBounds(markerLayer.value.getBounds());
+      map.value.setZoom(6);
+    })
     return {map, onMapLoaded};
   }
 });
-
-// https://api.opencdms.org/collections/ca_clim/items?filter=phenomenon_end%20DURING%201990-02-01T00:00:00Z/1990-03-01T00:00:00Z
 
 </script>

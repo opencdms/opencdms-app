@@ -415,6 +415,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/map-picker-test.vue'),
       },
       {
+        path: '/tests/select-host',
+        name: 'test-select',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/experimental/select-host.vue'),
+      },
+      {
         path: '/forms/deployment-media/create',
         name: 'deployment-media-form',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/deployment-media.vue'),

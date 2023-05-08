@@ -1,4 +1,5 @@
-import { Model } from 'pinia-orm'
+import { Model, useRepo } from 'pinia-orm'
+import ApplicationState from '@/models/ApplicationState';
 import LinksType from '@/models/LinksType';
 import FacilityType from '@/models/FacilityType';
 import WmoRegion from '@/models/WmoRegion';
@@ -6,6 +7,8 @@ import Territory from '@/models/Territory';
 import TimeZone from '@/models/TimeZone';
 import User from '@/models/User';
 import Status from '@/models/Status';
+
+import {to_geojson} from '@/utils/geojson.js';
 
 export default class Host extends Model {
   static entity = 'host';
@@ -39,13 +42,55 @@ export default class Host extends Model {
       comments: this.string('')
     };
   };
-  static saving (model) {};
-  static saved (model) { };
-  static creating(model) {};
-  static created(model) {};
+  static saving (model) {
+  };
+  static saved (model) {
+  };
+  static creating(model) {
+    if( useRepo(ApplicationState).where('key','databaseReady').first() ){
+      var to_save = to_geojson([model]);
+      // update status
+      to_save.map( (obj) => {
+        var payload = JSON.stringify(obj);
+        var url_ = process.env.API + "/collections/stations/items"
+        // PUT for update
+        fetch(url_, {method:'OPTIONS'}).then( (response) => {console.log(response)});
+        fetch(url_, {
+          method: 'POST',
+          body: payload,
+          headers: {
+            'encode': 'json',
+            "Origin": "http://localhost:81",
+            'Content-Type': 'application/geo+json'
+          }
+        })
+      });
+    };
+  };
+  static created(model) {
+  };
   static deleting(model) {};
   static deleted (model) {};
   static updating (model) {};
-  static updated (model) {};
+  static updated (model) {
+    // now we want to save to the backend
+    var to_save = to_geojson([model]);
+    console.log( to_save );
+    to_save.map( (obj) => {
+      var payload = JSON.stringify(obj);
+      var url_ = process.env.API + "/collections/stations/items/" + obj.id
+      // PUT for update
+      fetch(url_, {method:'OPTIONS'}).then( (response) => {console.log(response)});
+      fetch(url_, {
+        method: 'PUT',
+        body: payload,
+        headers: {
+          'encode': 'json',
+          "Origin": "http://localhost:81",
+          'Content-Type': 'application/geo+json'
+        }
+      })
+    });
+  };
 };
 

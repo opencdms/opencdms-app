@@ -11,7 +11,7 @@
   import 'leaflet.markercluster';
 
   // vue / vuetify imports
-  import { defineComponent, ref, watchEffect } from 'vue';
+  import { defineComponent, ref, watchEffect, watch } from 'vue';
   import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
 
   import {useRepo} from 'pinia-orm';
@@ -52,73 +52,62 @@
     setup(props, context) {
       const features = ref([]);
       const hostRepo = useRepo(Host);
+      const host = ref(null);
+      const map = ref(null);
 
-      const getFeatures = async () => {
-        let data;
-        if( hostRepo.all().length === 0){
-          await loadData('/data/hosts.psv').then( (result) => { hostRepo.save(result) });
-        }
-        data = await useRepo(Host).where( 'location', (value) => {
-          return value !== "";
-        }).get()
-        features.value = convertToGeoJson(data);
-      };
+      host.value = hostRepo.all(); //
+      const stationLayer = ref(null);
 
       const updateMarkers = async() => {
-        // function to update markers when the data changes
-        console.log( "update markers" );
-      }
-
-      getFeatures();
-
-      // load host data
-
-      const onMapLoaded = async (map) => {
-        console.log("setting up map")
-        if ( features.value.length === 0){
-          await getFeatures();
+        if( map.value ){
+          // function to update markers when the data changes
+          console.log( "update markers" );
+          stationLayer.value.clearLayers();
+          features.value.map( (feature) => {
+            let coords = feature.geometry.coordinates.reverse();
+            const marker = L.marker(coords, {
+              // Set the marker icon, if desired
+              icon: L.icon({
+                iconUrl: 'marker-icon.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+              }),
+            });
+            // set ID for marker
+            marker.id = feature.id;
+            // set type of marker
+            marker.type = "host";
+            // add popup to marker
+            marker.bindPopup('<h3><a href="#/station/'+feature.id+'"/>' + feature.properties.name + '</a></h3>');
+            stationLayer.value.addLayer(marker)
+          })
+          // geojsonLayer.value.addData( features.value );
         }
-        updateMarkers();
-        // leaflet cluster marker for clustering
-        const cluster = L.markerClusterGroup({id: 'hostLayer'});
-        console.log(features.value)
-        features.value.map( (feature => {
-          let coords = feature.geometry.coordinates.reverse();
-          const marker = L.marker(coords, {
-            // Set the marker icon, if desired
-            icon: L.icon({
-              iconUrl: 'marker-icon.png',
-              iconSize: [25, 41],
-              iconAnchor: [12, 41],
-              popupAnchor: [1, -34],
-            }),
-          });
-          // set ID for marker
-          marker.id = feature.id;
-          // set type of marker
-          marker.type = "host";
-          // add popup to marker
-          marker.bindPopup('<h3><a href="#/station/'+feature.id+'"/>' + feature.properties.name + '</a></h3>');
-          //marker.bindTooltip( 'name: ' + feature.properties.name);
-          // add to cluster
-          cluster.addLayer(marker);
-        }));
-        map.addLayer(cluster)
-        console.log("map loaded")
-      }
+      };
 
+      const onMapLoaded = async (mapInstance) => {
+        map.value = mapInstance
+        console.log("setting up map")
+        stationLayer.value = L.markerClusterGroup().addTo(map.value)
+        if( features.value.length ){
+          updateMarkers()
+        }
+      };
+      watch(features , () => {updateMarkers()});
+
+    onMounted( () => {
+      features.value = convertToGeoJson(host.value);
+    });
       return {onMapLoaded};
     }
   });
 
   // the following to be moved to utils
   function convertToGeoJson(data) {
-  console.log(data);
   const geoJsonData = data.map(d => {
     // extract the coordinates from WKT string and create a LatLng object
-    console.log(d.location);
     const coords = d.location.match(/POINT\(([-\d\.]+)\s+([-\d\.]+)\)/);
-    console.log(coords);
     const latlng = [parseFloat(coords[1]), parseFloat(coords[2])];
     return {
       //type: 'FeatureCollection',

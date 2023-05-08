@@ -100,7 +100,6 @@
         // update the wkt
         var _wkt = new Wkt.Wkt();
         _wkt.read(JSON.stringify(geom.value));
-        console.log("setting WKT")
         geom.value.properties.wkt = "SRID=4326; " + _wkt.write();
         updateMap(map);
       }, { deep: true });
@@ -118,17 +117,11 @@
       )
 
       const updateMap = (map) => {
-        console.log("updating map")
         if( map.value ){
           if( geom.value.geometry.coordinates[0] != null & geom.value.geometry.coordinates[1] != null ){
-            console.log(9)
             geojsonLayer.value.clearLayers();
-            console.log(8)
             geojsonLayer.value.addData( geom.value);
-            console.log(7)
             map.value.setView( [ geom.value.geometry.coordinates[1], geom.value.geometry.coordinates[0]])
-            console.log(6)
-            console.log(geom.value.properties.wkt, " emitted")
             emit("update:modelValue", geom.value.properties.wkt);
           }
         }
