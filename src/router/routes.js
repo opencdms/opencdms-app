@@ -209,6 +209,29 @@ const routes = [
            }
          ]
       },
+
+      {
+        path: '/data',
+        name: 'data',
+        children: [
+          {
+            path: 'station',
+            name: 'data-station',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-station.vue')
+          }
+        ]
+     },
+     {
+        path: '/data/station/:id(.*)',
+        children: [
+          {
+            path: '',
+            name: 'data-station-id',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-station.vue'),
+          }
+        ]
+      },
+
       {
         path: '/forms/observation-type/create',
         name: 'observation-type-form',
