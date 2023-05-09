@@ -1,6 +1,6 @@
 <template>
   <div>
-    <data-station title="data-station" content="This page is under construction" description="station centered view of observations" />
+    <data-station/>
   </div>
 </template>
 

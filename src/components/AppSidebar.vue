@@ -47,12 +47,12 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-table" title="Data"/>
       </template>
-      <v-list-item router :to="{name: 'data-ingest'}" prepend-icon="mdi-spirit-level" title="data-ingest"/>
-      <v-list-item router :to="{name: 'data-extract'}" prepend-icon="mdi-spirit-level" title="data-extract"/>
-      <v-list-item router :to="{name: 'data-inventory'}" prepend-icon="mdi-spirit-level" title="data-inventory"/>
-      <v-list-item router :to="{name: 'data-map'}" prepend-icon="mdi-spirit-level" title="data-map"/>
-      <v-list-item router :to="{name: 'data-station'}" prepend-icon="mdi-spirit-level" title="data-station"/>
-      <v-list-item router :to="{name: 'data-parameter'}" prepend-icon="mdi-spirit-level" title="data-parameter"/>
+      <v-list-item router :to="{name: 'data-ingest'}" prepend-icon="mdi-database-arrow-left" title="data-ingest"/>
+      <v-list-item router :to="{name: 'data-extract'}" prepend-icon="mdi-database-arrow-right" title="data-extract"/>
+      <v-list-item router :to="{name: 'data-inventory'}" prepend-icon="mdi-abacus" title="data-inventory"/>
+      <v-list-item router :to="{name: 'data-map'}" prepend-icon="mdi-map" title="data-map"/>
+      <v-list-item router :to="{name: 'data-station'}" prepend-icon="mdi-map-marker" title="data-station"/>
+      <v-list-item router :to="{name: 'data-parameter'}" prepend-icon="mdi-thermometer" title="data-parameter"/>
     </v-list-group>
     <v-divider/>
 
