@@ -15,18 +15,69 @@
     <v-row v-if='host'>
       <v-col :cols="12">
         <v-card>
-          <v-card-title>Select from available data for {{ $route.params.id }}</v-card-title>
-
+          <v-card-title>Select from available data for {{ host.name }}</v-card-title>
+          
           <v-card-item>
               <v-container>
-                <v-row style="height: 600px;">
-                  <v-col :cols="4"><select-observed-property/></v-col>
-                  <v-col :cols="4"><VueDatePicker :enable-time-picker="false" label="phenomenon_start" v-model="start_date"  hint="Phenomenon start date" persistent-hint></VueDatePicker></v-col>
-                  <v-col :cols="4"><VueDatePicker :enable-time-picker="false" label="phenomenon_end" v-model="end_date"  hint="Phenomenon end date" persistent-hint></VueDatePicker></v-col>
+                <v-row>
+                  <v-col :cols="4"><select-observed-property v-model="selectedProperty"/></v-col>
+                  <v-col :cols="4">
+                    <VueDatePicker
+                      :start-date="initDate"
+                      :disabled="startDisabled"
+                      :enable-time-picker="false"
+                      :format="dateFormat"
+                      :min-date="minDate"
+                      :max-date="maxDate"
+                      :teleport="true"
+                      hint="Phenomenon start date"
+                      label="phenomenon_start"
+                      persistent-hint
+                      prevent-min-max-navigation
+                      v-model="startDate"
+                    ></VueDatePicker>
+                    <!-- v-message is not being formatted correctly, therefore manually formatting -->
+                    <div class="v-messages" role="alert" aria-live="polite">
+                      <div class="v-messages__message" style="padding-top: 10px;">Select a start date</div>
+                    </div>
+                  </v-col>
+                  <v-col :cols="4">
+                    <VueDatePicker
+                      :start-date="initDate"
+                      :disabled="endDisabled"
+                      :enable-time-picker="false"
+                      :format="dateFormat"
+                      :min-date="minDate"
+                      :max-date="maxDate"
+                      :teleport="true"
+                      hint="Phenomenon end date"
+                      label="phenomenon_end"
+                      persistent-hint
+                      prevent-min-max-navigation
+                      v-model="endDate"
+                    ></VueDatePicker>
+                    <div class="v-messages" role="alert" aria-live="polite">
+                      <div class="v-messages__message" style="padding-top: 10px;">Select an end date</div>
+                    </div>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-item>
+        </v-card>
+      </v-col>
+    </v-row>
 
+    <v-row>
+      <v-col :cols="12">
+        <v-btn @click="plotChart" :disabled="plotDisabled">Plot Chart</v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col :cols="12">
+        <v-card v-if='obsLoaded'>
+          <v-card-title></v-card-title>
+          <v-card-item><Line :data="chartData" :options="chartOptions"/></v-card-item>
         </v-card>
       </v-col>
     </v-row>
@@ -48,12 +99,15 @@ import {useRepo} from 'pinia-orm';
 import SelectHost from '@/web-components/pickers/select-host.vue';
 import SelectObservedProperty from '@/web-components/pickers/select-observed-property.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
-//import VueDatePicker from '@/web-components/pickers/date-picker.vue';
 import '@vuepic/vue-datepicker/dist/main.css';
-
 
 // opencdms imports
 import Host from '@/models/Host';
+
+import {Line} from 'vue-chartjs';
+import { Chart, CategoryScale, LinearScale, LineController, LineElement, PointElement} from 'chart.js';
+import { max } from 'd3';
+Chart.register(CategoryScale, LinearScale, LineController, LineElement, PointElement);
 
 export default defineComponent({
   name: 'station',
@@ -68,57 +122,150 @@ export default defineComponent({
     VAutocomplete, VContainer, VCol, VRow,
     SelectHost,
     SelectObservedProperty,
-    VueDatePicker
+    VueDatePicker,
+    Line
   },
   methods: {},
   setup(props) {
     // set up varaiables
+    const initDate = ref(null)
+    const minDate = ref(null)
+    const maxDate = ref(null)
+    const plotDisabled = ref(true);
     const selectedHost = ref(null)
+    const selectedProperty = ref(null)
     const router = useRouter();
-    const geom = ref(null);
-
-    const start_date = ref(null);
-    const end_date = ref(null);
-
-    const query_param = ref(
-      {
-      }
-    );
-
+    const startDisabled = ref(true);
+    const endDisabled = ref(true);
+    const startDate = ref(null);
+    const endDate = ref(null);
+    const route = useRoute();
+    const data = ref([]);
+    const obs = ref(null);
+    const obsLoaded = ref(false);
 
     // set up repos
     const hostRepo = useRepo(Host);
     const hostOptions = computed(() => { return hostRepo.all() });
     const host = ref(null)
 
-    const edit = () => {
-      router.push('/data/station/'+route.params.id+'/edit');
-    };
+    const dateFormat = (date) => {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${year}-${month}-${day}`;
+    }
+
+    const chartOptions = computed(() => ({
+      scales: {
+        x: {
+          type: "category",
+          title: {
+            display: true,
+            text: 'Date'
+          }
+        },
+        y: {
+          type: 'linear',
+          position: 'left',
+          ticks: {
+            stepSize: 1
+          },
+          title: {
+            display: true,
+            text: selectedProperty.value ? selectedProperty.value.name : 'Value'
+          }
+        },
+      }
+    }));
+
+    const plotChart = async () => {
+      let dateRange = '';
+      // Getting an error if we don't initialise obs.value early
+      obs.value = [];  
+      
+      if (startDate.value !== null && endDate.value !== null) {
+        const start = startDate.value.toISOString().split('T')[0];
+        const end = endDate.value.toISOString().split('T')[0];
+        dateRange = `&datetime=${encodeURIComponent(start)}/${encodeURIComponent(end)}`;
+      }
+      
+      const encodedObservedPropertyId = encodeURIComponent(selectedProperty.value.id);
+      const apiUrl = `${process.env.API}/collections/observations/items?f=json&lang=en-US&properties=phenomenon_start,result_value&skipGeometry=true&observed_property_id=${encodedObservedPropertyId}${dateRange}`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('API request failed:', apiUrl);
+          }
+        })
+        .then(data => {
+          obs.value = data.features.map(feature => {
+            const datetime = new Date(feature.properties.phenomenon_start);
+            const date = datetime.toISOString().split('T')[0];
+            return {
+              date: date,
+              data: feature.properties.result_value
+            }
+          })
+        })
+
+        .catch(error => {
+          console.error(error);
+        });
+
+      obsLoaded.value = true;
+    }
+ 
+    function setDateRange(observed_property_id) {
+      const encodedObservedPropertyId = encodeURIComponent(observed_property_id);
+      const apiUrl = `${process.env.API}/collections/observations/items?f=json&lang=en-US&limit=1&properties=phenomenon_start&skipGeometry=true&observed_property_id=${encodedObservedPropertyId}`;
+
+      const firstDateUrl = `${apiUrl}&sortby=%2Bphenomenon_start`;
+      const lastDateUrl = `${apiUrl}&sortby=-phenomenon_start`;
+      
+      fetch(firstDateUrl)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('API request failed:', firstDateUrl);
+          }
+        })
+        .then(data => {
+          minDate.value = 
+            (new Date(data.features[0].properties['phenomenon_start'])).toISOString().split("T")[0];
+        })
+        .catch(error => {
+          console.error(error);
+        });
+      
+      fetch(lastDateUrl)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('API request failed:', firstDateUrl);
+          }
+        })
+        .then(data => {
+          maxDate.value = 
+            (new Date(data.features[0].properties['phenomenon_start'])).toISOString().split("T")[0];
+          initDate.value = maxDate.value;
+          })
+        .catch(error => {
+          console.error(error);
+        });
+      // enable both the start and end date pickers
+      startDisabled.value = endDisabled.value = false;
+    }
 
     const fetchRecord = async(identifier) => {
       // load selected host
       host.value = useRepo(Host).where('id',route.params.id).first();
-    }
-
-    // add watch to update the geom
-    watch(host, (newVal) => {
-      if( newVal ){
-        const coords = newVal.location.match(/POINT\(([-\d\.]+)\s+([-\d\.]+)\)/);
-        const latlng = [parseFloat(coords[1]), parseFloat(coords[2])];
-        geom.value = {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: latlng
-          }
-        }
-      }
-      console.log(geom.value)
-    });
-
-    const route = useRoute();
-    const data = ref([]);
-
+    };
 
     onMounted( async() => {
       fetchRecord( route.params.id );
@@ -131,6 +278,62 @@ export default defineComponent({
     });
     onErrorCaptured( () => {});
     return {host, edit, hostOptions, selectedHost, geom, start_date, end_date};
+      watch( (selectedProperty), (data) => {
+        setDateRange(data.id);
+      } )
+      watch( (startDate), (data) => {
+        plotDisabled.value = (startDate.value == null || endDate.value == null);
+        plotDisabled.value ? obsLoaded.value = false : obsLoaded.value = false
+      } )
+      watch( (endDate), (data) => {
+        plotDisabled.value = (startDate.value == null || endDate.value == null);
+        plotDisabled.value ? obsLoaded.value = false : obsLoaded.value = false
+      } )
+
+    });
+    onErrorCaptured( () => {});
+
+
+    const chartData = computed(() => {
+      if (obs.value) {
+        //console.log(obs.value);
+        let retval = {
+          // labels: obs.value.map(d => new Date(d.date)),
+          labels: obs.value.map(d => d.date),
+          datasets: [
+            {
+              label: 'Air temperature',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1,
+              pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+              pointBorderColor: 'rgba(255, 99, 132, 1)',
+              pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
+              pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+              hoverBackgroundColor: 'rgba(255, 99, 132, 0.8)',
+              hoverBorderColor: 'rgba(255, 99, 132, 1)',
+              pointRadius: 2,
+              data: obs.value.map(d => d.data)
+            }
+          ]
+        };
+        return retval;
+      } else {
+        return {};
+      }
+    });
+
+    return {host, plotChart, hostOptions, selectedHost, selectedProperty, /*geom,*/
+      obs, chartData, chartOptions, obsLoaded, dateFormat,
+      initDate,
+      minDate,
+      maxDate,
+      plotDisabled,
+      startDate,
+      endDate,
+      startDisabled,
+      endDisabled
+    };
   }
 
 });

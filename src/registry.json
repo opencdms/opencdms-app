@@ -55,24 +55,6 @@
   },
   {
     "component": "VListItem",
-    "name": "data-station",
-    "to": "/observations/station",
-    "routeName": "data-station",
-    "icon": "mdi-construction",
-    "display": true,
-    "package": "@opencdms"
-  },
-  {
-    "component": "VListItem",
-    "name": "data-station",
-    "to": "/observations/station/",
-    "routeName": "data-station",
-    "icon": "mdi-construction",
-    "display": true,
-    "package": "@opencdms"
-  },
-  {
-    "component": "VListItem",
     "name": "data-parameter",
     "to": "/observations/parameter",
     "routeName": "data-parameter",

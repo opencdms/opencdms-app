@@ -38,8 +38,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "dashboard" */ '@/views/home.vue'),
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/home.vue'),
       },
       {
          path: '/station',
@@ -170,6 +169,29 @@ const routes = [
            }
          ]
       },
+
+      {
+        path: '/data',
+        name: 'data',
+        children: [
+          {
+            path: 'station',
+            name: 'data-station',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-station.vue')
+          }
+        ]
+     },
+     {
+        path: '/data/station/:id(.*)',
+        children: [
+          {
+            path: '',
+            name: 'data-station-id',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-station.vue'),
+          }
+        ]
+      },
+
       {
         path: '/forms/observation-type/create',
         name: 'observation-type-form',
