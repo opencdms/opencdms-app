@@ -173,7 +173,7 @@ export default defineComponent({
           },
           title: {
             display: true,
-            text: selectedProperty.value ? selectedProperty.value.name : 'Value'
+            text: selectedProperty.value?.short_name
           }
         },
       }
@@ -190,8 +190,9 @@ export default defineComponent({
         dateRange = `&datetime=${encodeURIComponent(start)}/${encodeURIComponent(end)}`;
       }
       
+      const encodedHostId = encodeURIComponent(host.value.id);
       const encodedObservedPropertyId = encodeURIComponent(selectedProperty.value.id);
-      const apiUrl = `${process.env.API}/collections/observations/items?f=json&lang=en-US&properties=phenomenon_start,result_value&skipGeometry=true&observed_property_id=${encodedObservedPropertyId}${dateRange}`;
+      const apiUrl = `${process.env.API}/collections/observations/items?f=json&lang=en-US&limit=10000&sortby=phenomenon_start&properties=observed_property_id,phenomenon_start,result_value&skipGeometry=true&host_id=${encodedHostId}&observed_property_id=${encodedObservedPropertyId}${dateRange}`;
 
       fetch(apiUrl)
         .then(response => {
@@ -210,6 +211,7 @@ export default defineComponent({
               data: feature.properties.result_value
             }
           })
+          console.log('fetch obs', apiUrl, obs.value);
         })
 
         .catch(error => {
@@ -220,12 +222,17 @@ export default defineComponent({
     }
  
     function setDateRange(observed_property_id) {
+      console.log('setDateRange(', observed_property_id, ')');
+      const encodedHostId = encodeURIComponent(host.value.id);
       const encodedObservedPropertyId = encodeURIComponent(observed_property_id);
-      const apiUrl = `${process.env.API}/collections/observations/items?f=json&lang=en-US&limit=1&properties=phenomenon_start&skipGeometry=true&observed_property_id=${encodedObservedPropertyId}`;
+      const apiUrl = `${process.env.API}/collections/observations/items?f=json&lang=en-US&limit=1&properties=phenomenon_start&skipGeometry=true&host_id=${encodedHostId}&observed_property_id=${encodedObservedPropertyId}`;
 
       const firstDateUrl = `${apiUrl}&sortby=%2Bphenomenon_start`;
       const lastDateUrl = `${apiUrl}&sortby=-phenomenon_start`;
       
+      // Disable date pickers
+      startDisabled.value = endDisabled.value = true;
+
       fetch(firstDateUrl)
         .then(response => {
           if (response.ok) {
@@ -237,9 +244,14 @@ export default defineComponent({
         .then(data => {
           minDate.value = 
             (new Date(data.features[0].properties['phenomenon_start'])).toISOString().split("T")[0];
+          console.log('fetch firstDateUrl', firstDateUrl, minDate.value);
+          if (minDate.value != null && maxDate.value == null) {
+            startDisabled.value = endDisabled.value = false;
+          }
         })
         .catch(error => {
-          console.error(error);
+          //console.error(error);
+          minDate.value = null;
         });
       
       fetch(lastDateUrl)
@@ -254,17 +266,22 @@ export default defineComponent({
           maxDate.value = 
             (new Date(data.features[0].properties['phenomenon_start'])).toISOString().split("T")[0];
           initDate.value = maxDate.value;
-          })
+          console.log('fetch lastDateUrl', lastDateUrl, maxDate.value);
+          if (minDate.value != null && maxDate.value == null) {
+              startDisabled.value = endDisabled.value = false;
+          }
+        })
         .catch(error => {
-          console.error(error);
+          //console.error(error);
+          maxDate.value = null;
         });
-      // enable both the start and end date pickers
-      startDisabled.value = endDisabled.value = false;
     }
 
     const fetchRecord = async(identifier) => {
       // load selected host
       host.value = useRepo(Host).where('id',route.params.id).first();
+      // Reset the other selectors
+      //selectedProperty.value = null;
     };
 
     onMounted( async() => {
@@ -279,7 +296,8 @@ export default defineComponent({
     onErrorCaptured( () => {});
     return {host, edit, hostOptions, selectedHost, geom, start_date, end_date};
       watch( (selectedProperty), (data) => {
-        setDateRange(data.id);
+        console.log('selectedProperty =', data);
+        if (data !== null) setDateRange(data.id);
       } )
       watch( (startDate), (data) => {
         plotDisabled.value = (startDate.value == null || endDate.value == null);
