@@ -1,22 +1,22 @@
 // component to select station
 <template>
-  <v-autocomplete :items="options" item-title="id" item-value="id" label="observed property" v-model="selected" :hint="selected ? selected.standard_name : 'Select an observed property'" persistent-hint return-object/>
+  <v-autocomplete :items="options" item-title="id" item-value="id" label="observer" v-model="selected" :hint="selected ? selected.name : 'Select an observer'" persistent-hint return-object/>
 </template>
 <script>
-  // load host
-  import ObservedProperty from '@/models/ObservedProperty'
+  // load observer
+  import Observer from '@/models/Observer'
   import {useRepo} from 'pinia-orm'
   import {computed, defineComponent, ref, watch} from 'vue';
   import {VAutocomplete} from 'vuetify/lib/components';
   export default defineComponent({
-    name: "SelectObservedProperty",
+    name: "SelectObserver",
     components: {
       VAutocomplete
     },
     emits: ["update:modelValue"],
     setup(props, {emit}) {
       const selected = ref(null);
-      const options = computed( () => { return useRepo(ObservedProperty).all(); });
+      const options = computed( () => { return useRepo(Observer).all(); });
       console.log( options );
       const optionsHint = computed( () => {});
       watch( () => selected.value, (newValue) => {

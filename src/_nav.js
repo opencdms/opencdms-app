@@ -8,9 +8,9 @@ var registry = require("./registry.json")
 var pages = [
   {
     component: 'VListItem',
-    name: 'dashboard',
+    name: 'home',
     to: '/dashboard',
-    routeName: "dashboard",
+    routeName: "home",
     icon: 'mdi-view-dashboard',
   },
 ]

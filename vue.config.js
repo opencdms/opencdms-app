@@ -1,6 +1,7 @@
 const Dotenv = require('dotenv-webpack');
 const { defineConfig } = require('@vue/cli-service')
 
+
 module.exports = defineConfig({
   transpileDependencies: true,
   chainWebpack: (config) => {
@@ -28,6 +29,15 @@ module.exports = defineConfig({
   configureWebpack: {
     plugins: [
       new Dotenv()
-    ]
+    ],
+    resolve: {
+      fallback: {
+        fs: false,
+        crypto: require.resolve("crypto-browserify"),
+        path: require.resolve("path-browserify"),
+        https: require.resolve("https-browserify"),
+        http: require.resolve("stream-http")
+      }
+    }
   }
 })

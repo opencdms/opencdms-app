@@ -11,6 +11,7 @@
       <v-list-item router :to="{name: 'station-list'}" prepend-icon="mdi-table" title="Table view"/>
       <v-list-item router :to="{name: 'station-viewer'}" prepend-icon="mdi-pencil" title="View/edit"/>
       <v-list-item router :to="{name: 'host-form'}" prepend-icon="mdi-pencil" title="Create new"/>
+      <v-list-item router :to="{name: 'sensor-list'}" prepend-icon="mdi-upload" title="Import"/>
     </v-list-group>
     <v-divider/>
 
@@ -18,8 +19,8 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-thermometer" title="Sensors"/>
       </template>
-      <v-list-item router :to="{name: 'sensor-list'}" prepend-icon="mdi-table" title="sensor-list"/>
-      <v-list-item router :to="{name: 'sensor'}" prepend-icon="mdi-form-select" title="sensor"/>
+      <v-list-item router :to="{name: 'sensor-list'}" prepend-icon="mdi-table" title="Table view"/>
+      <v-list-item router :to="{name: 'sensor-viewer'}" prepend-icon="mdi-form-select" title="View single"/>
     </v-list-group>
     <v-divider/>
 
@@ -28,8 +29,8 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-cog-clockwise" title="Deployments"/>
       </template>
-      <v-list-item router :to="{name: 'deployment-list'}" prepend-icon="mdi-table" title="deployment-list"/>
-      <v-list-item router :to="{name: 'deployment'}" prepend-icon="mdi-form-select" title="deployment"/>
+      <v-list-item router :to="{name: 'deployment-list'}" prepend-icon="mdi-table" title="Table view"/>
+      <v-list-item router :to="{name: 'deployment-viewer'}" prepend-icon="mdi-form-select" title="View single"/>
     </v-list-group>
     <v-divider/>
 
@@ -47,6 +48,7 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-table" title="Data"/>
       </template>
+      <v-list-item router :to="{name: 'data-table'}" prepend-icon="mdi-table-search" title="Search"/>
       <v-list-item router :to="{name: 'data-ingest'}" prepend-icon="mdi-database-arrow-left" title="data-ingest"/>
       <v-list-item router :to="{name: 'data-extract'}" prepend-icon="mdi-database-arrow-right" title="data-extract"/>
       <v-list-item router :to="{name: 'data-inventory'}" prepend-icon="mdi-abacus" title="data-inventory"/>
@@ -98,8 +100,9 @@
       <template v-slot:activator="{ props }">
         <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="WIS2"/>
       </template>
-    <v-list-item router :to="{name: 'wis2-publication'}" prepend-icon="mdi-spirit-level" title="wis2-publication"/>
-    <v-list-item router :to="{name: 'wis2-subscription'}" prepend-icon="mdi-spirit-level" title="wis2-subscription"/>
+    <v-list-item router :to="{name: 'wis2-publication'}" prepend-icon="mdi-publish" title="Manage publications"/>
+    <v-list-item router :to="{name: 'wis2-subscription'}" prepend-icon="mdi-spirit-level" title="Manage subscriptions"/>
+    <v-list-item router :to="{name: 'wis2-catalogue'}" prepend-icon="mdi-cloud-search" title="Catalogue"/>
     </v-list-group>
     <v-divider/>
 

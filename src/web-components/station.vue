@@ -19,7 +19,7 @@
         </v-card>
       </v-col>
       <v-col :cols="6" align-self="center">
-        <feature-map :geom="geom"/>
+        <feature-map :geom="geom" style="height: 500px;"/>
       </v-col>
     </v-row>
     <v-row>

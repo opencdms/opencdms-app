@@ -275,6 +275,9 @@ export default defineComponent({
       watch( (selectedHost), (data) => {
         router.push('/data/station/'+data.id);
       } )
+    });
+    onErrorCaptured( () => {});
+    return {host, edit, hostOptions, selectedHost, geom, start_date, end_date};
       watch( (selectedProperty), (data) => {
         setDateRange(data.id);
       } )

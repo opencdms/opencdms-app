@@ -33,6 +33,9 @@ import WmoRegion from '@/models/WmoRegion';
 // business / master data
 import User from '@/models/User';
 import Host from '@/models/Host';
+import Deployment from '@/models/Deployment';
+import Observer from '@/models/Observer';
+import ObserverCharacteristics from '@/models/ObserverCharacteristics';
 import Feature from '@/models/Feature';
 
 import * as Wkt from 'wicket';
@@ -72,8 +75,11 @@ router.beforeEach( async () => {
   if( useRepo(Topography).all().length === 0){await loadData(process.env.API + '/vocabularies/topography/items?f=csv', true).then( (result) => { useRepo(Topography).save(result) })};
   if( useRepo(WmoRegion).all().length === 0){await loadData(process.env.API + '/vocabularies/wmo_region/items?f=csv', true).then( (result) => { useRepo(WmoRegion).save(result) })};
   if( useRepo(User).all().length === 0){await loadData(process.env.API + '/vocabularies/user/items?f=csv', true).then( (result) => { useRepo(User).save(result) })};
-  if( useRepo(Host).all().length === 0){await loadData(process.env.API + '/collections/stations/items?f=json', true).then( (result) => flatten_geojson(result.features) ).then( (result) => { useRepo(Host).save(result) })};
-  if( useRepo(Feature).all().length === 0){await loadData('/data/features.psv').then( (result) => { useRepo(Feature).save(result) })}; // TODO
+  if( useRepo(Host).all().length === 0){await loadData(process.env.API + '/collections/stations/items?limit=1000&f=json', true).then( (result) => flatten_geojson(result.features) ).then( (result) => { useRepo(Host).save(result) })};
+  if( useRepo(Deployment).all().length === 0){await loadData(process.env.API + '/vocabularies/deployment/items?limit=1000&f=csv', true).then( (result) => { useRepo(Deployment).save(result) })};
+  if( useRepo(Observer).all().length === 0){await loadData(process.env.API + '/collections/observer/items?limit=1000&f=json', true).then( (result) => flatten_geojson(result.features) ).then( (result) => { useRepo(Observer).save(result) })};
+  if( useRepo(ObserverCharacteristics).all().length === 0){await loadData(process.env.API + '/vocabularies/observer_characteristics/items?limit=1000&f=csv', true).then( (result) => { useRepo(ObserverCharacteristics).save(result) })};
+  // if( useRepo(Feature).all().length === 0){await loadData(process.env.API + '/collections/ontario_watershed/items?limit=1000&f=json', true).then( (result) => flatten_geojson(result.features) ).then( (result) => { useRepo(Feature).save(result) })};
   useRepo(ApplicationState).save({ 'key': 'databaseReady', 'value': 'ready'})
 });
 

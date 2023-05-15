@@ -1,30 +1,18 @@
 <template>
   <v-card>
-    <v-card-title>{{ title }}</v-card-title>
-    <v-card-text>{{ content }}</v-card-text>
-    <v-card-text>{{ description }}</v-card-text>
+    <v-card-title>Ingest data</v-card-title>
+    <v-card-text>Ingest is currently supported via file upload to {{bucket}}</v-card-text>
   </v-card>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { ref, defineComponent } from 'vue';
 import { VCard, VCardTitle, VCardText } from 'vuetify/lib/components';
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onErrorCaptured} from 'vue';
+
 export default defineComponent({
   name: 'data-ingest',
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    content: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    }
   },
   components: {
     VCard,
@@ -33,6 +21,9 @@ export default defineComponent({
   },
   methods: {},
   setup() {
+    const bucket=ref("http://localhost:9000");
+    bucket.value = process.env.BUCKET;
+    console.log(bucket.value)
     // lifecycle hooks
     onBeforeMount( () => {
       // This hook is called before the component is mounted to the DOM.
@@ -63,6 +54,7 @@ export default defineComponent({
       // This is a good place to perform any final cleanup or tear down of resources.
     });
     onErrorCaptured( () => {});
+    return {bucket};
   }
 
 });

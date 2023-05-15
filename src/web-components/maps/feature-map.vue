@@ -1,9 +1,5 @@
 <template>
-  <v-card style="height: 500pt;">
-    <v-card-text style="height: 100%;">
-      <base-map @mapLoaded="onMapLoaded" style="height: 100%;" zoom="4"/>
-    </v-card-text>
-  </v-card>
+      <base-map @mapLoaded="onMapLoaded" style="height: 100%;" zoom="4" :id="id"/>
 </template>
 
 
@@ -30,6 +26,10 @@ export default defineComponent({
     geom: {
       type: Object,
       required: false
+    },
+    id: {
+      type: String,
+      default: "map"
     }
   },
   components: {
@@ -40,6 +40,7 @@ export default defineComponent({
     const map = ref(null);
     const markerLayer = ref(null);
     const onMapLoaded = async (mapInstance) => {
+      console.log( props.id )
       map.value = mapInstance;
       if ( props.geom ){
         // make sure the geometry is valid

@@ -77,28 +77,6 @@ export default defineComponent({
     };
 
     onMounted( async() => {
-      /*
-      if( hostRepo.all().length === 0){
-        loadCSV("/data/hosts.psv").then( (result) => {
-          const data = ref(null);
-          data.value = result.csvData;
-          for (let i = 0; i < data.value.length; i++) {
-            data.value[i].links = JSON.parse(data.value[i].links);
-            //console.log(JSON.parse(data.value[i].links));
-          }
-          hostRepo.save(data.value);
-          headers.value = Object.keys(data.value[0]).map( key => ({
-            //title: key.replace("cdm_",""),
-            title: key,
-            value: key,
-            key: key,
-            sortable: true
-          }));
-          console.log(hostRepo.all()) ;
-          items.value = hostRepo.all();
-        });
-      }else{
-      */
         items.value = hostRepo.all();
         headers.value = Object.keys(items.value[0]).map( key => ({
             //title: key.replace("cdm_",""),
@@ -112,13 +90,6 @@ export default defineComponent({
 
       console.log(headers);
       console.log(hostRepo.all());
-
-      //items.value = hostRepo.all();
-      //console.log(" ++++++++++++++++++++++++++++++++++++++++++++++++++++++ ")
-      //console.log(items.value);
-      //hostRepo.save(items.value);
-      //console.log(hostRepo.all());
-      //console.log(" ------------------------------------------------------ ")
     });
     return {headers, items, search, sortBy};
   }
