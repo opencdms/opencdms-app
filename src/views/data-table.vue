@@ -1,17 +1,17 @@
 <template>
   <div>
-    <data-ingest/>
+    <data-station/>
   </div>
 </template>
 
 <script>
-import DataIngest from './../web-components/data-ingest.vue';
+import DataStation from '@/web-components/data-table.vue';
 
 
 export default {
   name: 'MyView',
   components: {
-    DataIngest,
+    DataStation,
   },
 };
 </script>

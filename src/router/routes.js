@@ -41,42 +41,6 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/home.vue'),
       },
-      // stations
-      // - map
-      // - list
-      // - view single station
-      // - edit single station
-      // - configuration
-      //   - observed parameters, qc limits
-      //   - inspection / maintenance logs
-      // sensors
-      // - list
-      // - view single sensor
-      // - edit single sensor
-      // - configure
-      //   - sensor specifications
-      //   - calibrations
-      //   - inspection / maintenance logs
-      // deployments
-      // - list
-      // - view single deployment information
-      // - edit single deployment information
-      // features
-      // - map view
-      // - list view
-      // - view single feature
-      // - edit single feature
-      // data
-      //
-      // form entry
-      // climate products
-      // quality control
-      // settings
-      // WIS2.0
-      // - metadata
-      // - publication
-      // - subscription
-
       {
          path: '/station',
          name: 'station',
@@ -126,24 +90,22 @@ const routes = [
              path: 'list',
              name: 'sensor-list',
              component: () => import(/* webpackChunkName: "dashboard" */ '@/views/sensor-list.vue')
-           }
+           },
+           {
+             path: 'view',
+             name: 'sensor-viewer',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/sensor.vue'),
+           },
         ]
       },
       {
-         path: '/sensor/:id',
-         name: 'sensor-viewer',
-         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/sensor.vue'),
+         path: '/sensor/:id(.*)',
          children: [
            {
-             path: 'edit',
-             name: 'sensor-editor',
-             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/sensor.vue')
+             path: '',
+             name: 'sensor-viewer-id',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/sensor.vue'),
            },
-           {
-             path: 'history',
-             name: 'sensor-history',
-             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/sensor-list.vue')
-           }
          ]
       },
       {
@@ -154,24 +116,22 @@ const routes = [
              path: 'list',
              name: 'deployment-list',
              component: () => import(/* webpackChunkName: "dashboard" */ '@/views/deployment-list.vue')
-           }
+           },
+           {
+             path: 'view',
+             name: 'deployment-viewer',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/deployment.vue'),
+           },
         ]
       },
       {
-         path: '/deployment/:id',
-         name: 'deployment-viewer',
-         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/deployment.vue'),
+         path: '/deployment/:id(.*)',
          children: [
            {
-             path: 'edit',
-             name: 'deployment-editor',
-             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/deployment.vue')
+             path: '',
+             name: 'deployment-viewer-id',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/deployment.vue'),
            },
-           {
-             path: 'history',
-             name: 'deployment-history',
-             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/deployment-list.vue')
-           }
          ]
       },
       {
@@ -424,6 +384,26 @@ const routes = [
         path: '/forms/deployment-media/create',
         name: 'deployment-media-form',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/forms/deployment-media.vue'),
+      },
+      {
+        path: '/wis2/catalogue',
+        name: 'wis2-catalogue',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/wis2-subscribe.vue'), // to do, change view name
+      },
+     {
+      path: '/data/station/:id(.*)',
+        children: [
+          {
+            path: '',
+            name: 'data-station-id',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-station.vue'),
+          }
+        ]
+      },
+      {
+        path: '/data/table',
+        name: 'data-table',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-table.vue')
       },
       ...generateOtherRoutes(navs)
     ],

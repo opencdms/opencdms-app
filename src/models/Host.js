@@ -49,7 +49,6 @@ export default class Host extends Model {
   static creating(model) {
     if( useRepo(ApplicationState).where('key','databaseReady').first() ){
       var to_save = to_geojson([model]);
-      // update status
       to_save.map( (obj) => {
         var payload = JSON.stringify(obj);
         var url_ = process.env.API + "/collections/stations/items"

@@ -14,11 +14,11 @@ export default defineComponent({
   props: {
     center: {
       type: Object,
-      default: () => ({ lat: 46.3097, lng: -79.4625 })
+      default: () => ({ lat: 46.223240947638416, lng: 6.146185398101807 })
     },
     zoom: {
       type: Number,
-      default: 8
+      default: 16
     },
     selectEnabled: {
       type: Boolean,

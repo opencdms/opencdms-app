@@ -6,7 +6,6 @@
             <v-card-item><v-text-field label="id" v-model="host.id"  hint="ID / primary key" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="name" v-model="host.name"  hint="Preferred name of host" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="description" v-model="host.description"  hint="Description of host" persistent-hint></v-text-field></v-card-item>
-            <v-card-item><LinkForm :links="host.links" @updateLinks="(value) => host.links = value" ></LinkForm></v-card-item>
             <v-card-item><geometry-picker v-model="host.location" style="height: 100%"/></v-card-item>
             <v-card-item><v-text-field label="elevation" v-model="host.elevation" type="number" hint="Elevation of station above mean sea level in meters" persistent-hint></v-text-field></v-card-item>
             <v-card-item><v-text-field label="wigos_station_identifier" v-model="host.wigos_station_identifier"  hint="WIGOS station identifier" persistent-hint></v-text-field></v-card-item>
@@ -30,6 +29,7 @@
                 </v-row>
               </v-container>
             </v-card-item>
+            <v-card-item><LinkForm :links="host.links" @updateLinks="(value) => host.links = value" ></LinkForm></v-card-item>
             <v-card-item><v-text-field label="_version" v-model="host._version" type="number" hint="Version number of this record (autoupdated)" persistent-hint readonly></v-text-field></v-card-item>
             <v-card-item><v-text-field label="_change_date" v-model="host._change_date"  hint="Date this record was changed (autoupdated)" persistent-hint readonly></v-text-field></v-card-item>
             <v-card-item><v-autocomplete :items="userOptions" item-title="name" item-value="id" label="user" v-model="host._user" :hint="userOptionsHint" return-object persistent-hint></v-autocomplete></v-card-item>

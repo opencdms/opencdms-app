@@ -4,14 +4,12 @@ import axios from 'axios';
 export async function loadData(datafile, isUrl = false) {
   let data;
   if (isUrl) {
-    const fileType = datafile.split('?f=').pop();
+    const fileType = datafile.split('f=').pop();
     if (fileType === 'csv') {
       data = await d3.csv(datafile, d3.autoType);
     } else if (fileType === 'psv') {
-      console.log("Loading PSV")
       data = await d3.dsv('|', datafile, d3.autoType);
     } else if (fileType === 'geojson' || fileType === 'json') {
-      console.log("Loading geojson")
       const response = await axios.get(datafile);
       data = response.data;
     } else {
