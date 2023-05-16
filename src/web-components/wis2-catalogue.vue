@@ -127,7 +127,6 @@ export default defineComponent({
         if( link.rel == "data" && (link.type == "MQTT" || link.type == "mqtt")){  // use toLower or similar. Not working, and neither is my brain.
           console.log("MQTT found");
           console.log( link );
-          console.log(collection)
           var sub = {
             id: collection.id,
             topic: link['wmo:topic'] ? link['wmo:topic'] : link['channel'],

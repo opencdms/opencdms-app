@@ -9,9 +9,9 @@ var pages = [
   {
     /*
     component: 'VListItem',
-    name: 'home',
+    name: 'dashboard',
     to: '/dashboard',
-    routeName: "home",
+    routeName: "dashboard",
     icon: 'mdi-view-dashboard',
     */
   },
