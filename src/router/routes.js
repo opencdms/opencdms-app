@@ -178,6 +178,11 @@ const routes = [
             path: 'station',
             name: 'data-station',
             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-station.vue')
+          },
+          {
+            path: 'parameter',
+            name: 'data-parameter',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-parameter.vue')
           }
         ]
      },
@@ -191,6 +196,18 @@ const routes = [
           }
         ]
       },
+
+      {
+        path: '/data/parameter/:id(.*)',
+        children: [
+          {
+            path: '',
+            name: 'data-parameter-id',
+            component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-parameter.vue'),
+          }
+        ]
+      },
+
 
       {
         path: '/forms/observation-type/create',
@@ -426,8 +443,8 @@ const routes = [
         path: '/data/table',
         name: 'data-table',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-table.vue')
-      }//,
-      //...generateOtherRoutes(navs)
+      },
+      ...generateOtherRoutes(navs)
     ],
   },
 ]

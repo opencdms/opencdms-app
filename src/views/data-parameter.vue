@@ -1,6 +1,6 @@
 <template>
   <div>
-    <data-parameter title="data-parameter" content="This page is under construction" description="parameter based view of observations" />
+    <data-parameter/>
   </div>
 </template>
 

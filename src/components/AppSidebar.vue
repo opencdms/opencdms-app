@@ -54,7 +54,7 @@
       <!--<v-list-item router :to="{name: 'data-inventory'}" prepend-icon="mdi-abacus" title="data-inventory"/>-->
       <!--<v-list-item router :to="{name: 'data-map'}" prepend-icon="mdi-map" title="data-map"/>-->
       <v-list-item router :to="{name: 'data-station'}" prepend-icon="mdi-map-marker" title="data-station"/>
-      <!--<v-list-item router :to="{name: 'data-parameter'}" prepend-icon="mdi-thermometer" title="data-parameter"/>-->
+      <v-list-item router :to="{name: 'data-parameter'}" prepend-icon="mdi-thermometer" title="data-parameter"/>
     </v-list-group>
     <v-divider/>
 
@@ -71,7 +71,7 @@
     </v-list-group>
     <v-divider/>
     -->
-    
+
     <!--
     <v-list-group value="Products">
       <template v-slot:activator="{ props }">
