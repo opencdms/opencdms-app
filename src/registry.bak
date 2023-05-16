@@ -19,6 +19,15 @@
   },
   {
     "component": "VListItem",
+    "name": "data-ingest",
+    "to": "/observations/ingest",
+    "routeName": "data-ingest",
+    "icon": "mdi-construction",
+    "display": true,
+    "package": "@opencdms"
+  },
+  {
+    "component": "VListItem",
     "name": "data-extract",
     "to": "/observations/extract",
     "routeName": "data-extract",

@@ -410,7 +410,7 @@ const routes = [
       {
         path: '/wis2/catalogue',
         name: 'wis2-catalogue',
-        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/wis2-subscribe.vue'), // to do, change view name
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/wis2-subscription.vue'), // to do, change view name
       },
      {
       path: '/data/station/:id(.*)',
@@ -426,8 +426,8 @@ const routes = [
         path: '/data/table',
         name: 'data-table',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-table.vue')
-      },
-      ...generateOtherRoutes(navs)
+      }//,
+      //...generateOtherRoutes(navs)
     ],
   },
 ]
