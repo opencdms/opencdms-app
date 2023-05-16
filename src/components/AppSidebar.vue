@@ -103,11 +103,18 @@
     </v-list-group>
     <v-divider/>
     -->
-
+    <v-list-group value="WIS2">
+      <template v-slot:activator="{ props }">
+        <v-list-item v-bind="props" prepend-icon="mdi-web" title="WIS2"/>
+      </template>
+      <v-list-item router :to="{name: 'wis2-catalogue'}" prepend-icon="mdi-cloud-search" title="Catalogue"/>
+    </v-list-group>
+    <v-divider/>
+    <v-list-item router :to="{name: 'roadmap'}" prepend-icon="mdi-map-marker-distance" title="Roadmap"/>
     <!--
     <v-list-group value="WIS2">
       <template v-slot:activator="{ props }">
-        <v-list-item v-bind="props" prepend-icon="mdi-spirit-level" title="WIS2"/>
+        <v-list-item v-bind="props" prepend-icon="mdi-web" title="WIS2"/>
       </template>
       <v-list-item router :to="{name: 'wis2-publication'}" prepend-icon="mdi-publish" title="Manage publications"/>
       <v-list-item router :to="{name: 'wis2-subscription'}" prepend-icon="mdi-spirit-level" title="Manage subscriptions"/>
