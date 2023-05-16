@@ -49,7 +49,11 @@ export default defineComponent({
           markerLayer.value = L.geoJSON(props.geom).addTo(map.value);
           map.value.fitBounds(markerLayer.value.getBounds());
           map.value.setZoom(6);
-          console.log("invalid geom");
+        }else{
+          console.log("invalid geom"); // data race ToDo fix
+          markerLayer.value = L.geoJSON(props.geom).addTo(map.value);
+          map.value.fitBounds(markerLayer.value.getBounds());
+          map.value.setZoom(6);
         }
       }else{
         console.log("No geometry");

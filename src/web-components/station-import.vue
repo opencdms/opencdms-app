@@ -63,10 +63,11 @@
         });
 
         if(response.ok){
-          // reload host
-          await loadData(process.env.API + '/collections/stations/items?limit=1000&f=json', true)
-            .then( (result) => flatten_geojson(result.features) ).then( (result) => { useRepo(Host).save(result) });
-          var station_url = '#/station/' + wigos_identifier.value;
+          // load new host and navigate to details
+          var station_id = wigos_identifier.value
+          var new_host = await loadData(process.env.API + '/collections/stations/items/'+station_id + "?f=json", true)
+                              .then( (result) => flatten_geojson(result.features ? result.features : [result]) )
+                              .then( (result) => { useRepo(Host).save(result) });
           router.push('/station/'+wigos_identifier.value);
         }else{
           console.log(response);
