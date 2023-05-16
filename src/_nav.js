@@ -7,11 +7,13 @@ var registry = require("./registry.json")
 // default menu item
 var pages = [
   {
+    /*
     component: 'VListItem',
     name: 'home',
     to: '/dashboard',
     routeName: "home",
     icon: 'mdi-view-dashboard',
+    */
   },
 ]
 
