@@ -59,6 +59,11 @@ const routes = [
              name: 'station-viewer',
              component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station.vue'),
            },
+           {
+             path: 'import',
+             name: 'station-import',
+             component: () => import(/* webpackChunkName: "dashboard" */ '@/views/station-import.vue'),
+           }
          ]
       },
       {
@@ -443,6 +448,11 @@ const routes = [
         path: '/data/table',
         name: 'data-table',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/data-table.vue')
+      },
+      {
+        path: '/roadmap',
+        name: 'roadmap',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/roadmap.vue')
       },
       ...generateOtherRoutes(navs)
     ],

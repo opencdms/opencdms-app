@@ -11,7 +11,7 @@
       <v-list-item router :to="{name: 'station-list'}" prepend-icon="mdi-table" title="Table view"/>
       <v-list-item router :to="{name: 'station-viewer'}" prepend-icon="mdi-pencil" title="View/edit"/>
       <v-list-item router :to="{name: 'host-form'}" prepend-icon="mdi-pencil" title="Create new"/>
-      <v-list-item router :to="{name: 'sensor-list'}" prepend-icon="mdi-upload" title="Import"/>
+      <v-list-item router :to="{name: 'station-import'}" prepend-icon="mdi-upload" title="Import"/>
     </v-list-group>
     <v-divider/>
 

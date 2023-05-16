@@ -5,17 +5,18 @@
       <v-card>
         <v-card-title>Select station</v-card-title>
         <v-card-text><select-host v-model="selectedHost"/></v-card-text>
-        <!-- <v-card-item><v-autocomplete :items="hostOptions" v-model="selectedHost" item-title="name" item-value="id" label="host" return-object persistent-hint></v-autocomplete></v-card-item> -->
       </v-card>
     </v-col>
     </v-row>
     <v-row>
     </v-row>
-    <v-row>
+    <v-row v-if="host != null">
       <v-col :cols="6">
         <v-card>
-          <v-card-title>Station: {{ $route.params.id }}</v-card-title>
-            <v-card-item><v-card-text><pre>{{host}}</pre></v-card-text></v-card-item>
+          <v-card-title>
+            Station: {{ $route.params.id }}
+          </v-card-title>
+          <v-card-item><v-card-text><pre>{{host}}</pre></v-card-text></v-card-item>
         </v-card>
       </v-col>
       <v-col :cols="6" align-self="center">
@@ -78,7 +79,11 @@ export default defineComponent({
 
     const fetchRecord = async(identifier) => {
       // load selected host
-      host.value = useRepo(Host).where('id',route.params.id).first();
+      var host_tmp = useRepo(Host).where('id',route.params.id).first();
+      if ( host_tmp != null ){
+        host.value = host_tmp;
+      }
+      console.log(host.value);
     }
 
     // add watch to update the geom
