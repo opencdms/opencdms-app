@@ -150,8 +150,8 @@ export default defineComponent({
         {title: "Host", value: "host_id", key: "host_id", sortable: false},
         {title: "Observed property", value: "observed_property_id", key: "observed_property_id", sortable: false},
         {title: "Result value", value: "result_value", key: "result_value", sortable: false},
-        {title: "Result units", value: "result_uom", key: "result_uom", sortable: false},
-        {title: "Result quality", value: "result_quality", key: "result_quality", sortable: false}
+        {title: "Result units", value: "result_uom", key: "result_uom", sortable: false}
+        //{title: "Result quality", value: "result_quality", key: "result_quality", sortable: false}
       ];
       console.log(items.value)
       console.log("Fetch complete")
