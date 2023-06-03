@@ -4,7 +4,7 @@
   "description": "OpenCDMS Application Shell",
   "author": "OpenCDMS (see opencdms.org)",
   "scripts": {
-    "serve": "vue-cli-service serve --port 81",
+    "serve": "vue-cli-service serve --port 8000",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
